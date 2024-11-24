@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+Allow: /videos/
+Allow: /channels/
+Allow: /playlists/
+
+Disallow: /account/
+Disallow: /settings/
+Disallow: /upload/
+Disallow: /api/
+Disallow: /admin/
+Disallow: /auth/
+
+# Block temp/processing content
+Disallow: /processing/
+Disallow: /temp/
+
+# Crawl rate control
+Crawl-delay: 10
+
+# Sitemap 
+Sitemap: 
