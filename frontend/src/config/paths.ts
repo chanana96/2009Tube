@@ -16,7 +16,7 @@ export const paths = {
 	},
 	user: {
 		profile: {
-			path: 'profile',
+			path: 'profile/:username',
 		},
 	},
 	protected: {

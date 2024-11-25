@@ -27,10 +27,22 @@ export const loginUserApi = async ({ username, password }: Omit<Inputs, 'email'>
 			username,
 			password,
 		});
+		console.log(response);
 		return response.data;
 	} catch (err) {
 		if (err instanceof AxiosError) {
 			return err.response!.data;
 		}
+	}
+};
+
+export const logout = async () => {
+	try {
+		await axios.post('/api/auth/logout', {
+			withCredentials: true,
+		});
+		sessionStorage.clear();
+	} catch (err) {
+		return err;
 	}
 };

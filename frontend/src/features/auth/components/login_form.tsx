@@ -33,6 +33,7 @@ export default function LoginForm() {
 			resetField('password', { keepError: true });
 		} else {
 			navigate('/');
+			navigate(0);
 		}
 	};
 

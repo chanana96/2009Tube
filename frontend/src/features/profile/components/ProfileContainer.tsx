@@ -1,12 +1,23 @@
 import React, { useContext } from 'react';
 import { Box, Avatar, Typography, Paper } from '@mui/material';
 import { UserContext } from '@/contexts/user_context';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getProfile } from '@/features/profile/api/find_profile_api';
+import { Navigate } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
+
 export const ProfileContainer = () => {
-	const context = useContext(UserContext);
-	if (!context) {
-		throw new Error('Out of provider scope');
-	}
-	const { user, isAuth } = context;
+	const { username } = useParams();
+
+	const { data, error, isLoading } = useQuery({
+		queryKey: ['profile', username],
+		queryFn: () => getProfile(username as string),
+	});
+
+	if (isLoading) return <CircularProgress />;
+	if (error) return <Navigate to='/404' />;
+	const { createdAt, bio, profile_image } = data?.data ?? {};
 
 	return (
 		<Box
@@ -36,11 +47,11 @@ export const ProfileContainer = () => {
 				sx={{ width: 100, height: 100 }}
 			/>
 
-			<Typography variant='h5'>{user}</Typography>
+			<Typography variant='h5'>{username}</Typography>
 
 			<Paper sx={{ p: 2, width: '100%', maxWidth: 600 }}>
 				<Typography variant='h6'>Bio</Typography>
-				<Typography variant='body1'>lorem ipsum or something</Typography>
+				<Typography variant='body1'>{createdAt}</Typography>
 			</Paper>
 		</Box>
 	);

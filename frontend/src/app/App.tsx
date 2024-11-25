@@ -4,8 +4,10 @@ import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useState, createContext, useContext } from 'react';
-import { AuthProvider } from '@/lib/auth.tsx';
+
 import { ThemeContext } from '@/contexts/theme_context';
+import { useQuery } from '@tanstack/react-query';
+
 function App() {
 	const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
 

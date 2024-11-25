@@ -14,17 +14,19 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import ContrastIcon from '@mui/icons-material/Contrast';
-import { useContext } from 'react';
-import { UserContext } from '@/contexts/user_context';
-import type { AuthContext } from '@/types/auth_context_types';
+import { logout } from '@/features/auth/api/auth_api';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import LinearProgress from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import CircularProgress from '@mui/material/CircularProgress';
+import type { UseQueryResult } from '@tanstack/react-query';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Props {
 	toggleTheme: () => void;
 	isDarkTheme: boolean;
 }
+
 const Search = styled('div')(({ theme }) => ({
 	'position': 'relative',
 	'borderRadius': theme.shape.borderRadius,
@@ -65,11 +67,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props) {
-	const context = useContext(UserContext);
-	if (!context) {
-		throw new Error('Out of provider scope');
-	}
-	const { user, isAuth, logout }: AuthContext = context;
+	const username = sessionStorage.getItem('user');
+	const { isAuthenticated, isLoading, user } = useAuth();
 
 	const navigate = useNavigate();
 
@@ -119,7 +118,7 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 			onClose={handleMenuClose}>
 			<MenuItem
 				onClick={() => {
-					navigate('/user/profile');
+					navigate(`/user/profile/${user}`);
 					handleMenuClose();
 				}}>
 				Profile
@@ -208,10 +207,10 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 					</Search>
 					<Box sx={{ flexGrow: 1 }} />
 					<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-						<IconButton size='large' edge='end'>
-							<ContrastIcon onClick={toggleTheme} />
+						<IconButton size='large' onClick={toggleTheme}>
+							<ContrastIcon />
 						</IconButton>
-						{isAuth ?
+						{username ?
 							<IconButton
 								size='large'
 								edge='end'
@@ -224,15 +223,19 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 							</IconButton>
 						:	<div>
 								<Link to='/auth/login'>
-									<Button>Login</Button>
+									<Button size='large' variant='outlined'>
+										Login
+									</Button>
 								</Link>
 								<Link to='/auth/register'>
-									<Button>Sign up</Button>
+									<Button size='large' variant='outlined'>
+										Sign up
+									</Button>
 								</Link>
 							</div>
 						}
 					</Box>
-					{/* <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+					<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
 						<IconButton
 							size='large'
 							aria-label='show more'
@@ -242,7 +245,7 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 							color='inherit'>
 							<MoreIcon />
 						</IconButton>
-					</Box> */}
+					</Box>
 				</Toolbar>
 			</AppBar>
 			{renderMobileMenu}

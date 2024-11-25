@@ -45,8 +45,9 @@ export const authService = {
 		try{
 			const pass = await verifyUserPassword(username, password)
 			if(pass){
+				const refresh = await tokenService.signRefresh(username)
 				const token = await tokenService.signJWT(username)
-				 return token
+				 return {refresh, token}
 			}
 			throw new Error("Invalid login");
 		}
