@@ -8,6 +8,7 @@ import authRouter from './routes/auth_routes'
 import queryRouter from './routes/query_routes';
 import cookieParser from 'cookie-parser';
 
+
 require('dotenv').config()
 
 

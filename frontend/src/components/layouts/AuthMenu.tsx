@@ -2,7 +2,7 @@ import { IconButton, Box } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import type { AuthMenuProps } from '@/types/navbar_types';
-
+import { Avatar } from '@mui/material';
 export const AuthMenu = ({
 	menuId,
 	handleProfileMenuOpen,
@@ -19,7 +19,7 @@ export const AuthMenu = ({
 				aria-haspopup='true'
 				onClick={handleProfileMenuOpen}
 				color='inherit'>
-				<AccountCircle />
+				<Avatar alt='avatar' src='/static/images/avatar/1.jpg' />
 			</IconButton>
 			<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
 				<IconButton

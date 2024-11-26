@@ -1,8 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import {authService} from '../services/auth_service'
 import { tokenService } from '../services/token_service';
-import cookieParser from 'cookie-parser'
-import { token } from 'morgan';
+import { userService } from '../services/user_service';
 
 export const registerUser = async (req: Request, res: Response, next:NextFunction) => {
 	try{
@@ -55,12 +54,25 @@ export const isUser = async (req:Request, res:Response) =>{
 		const token = req.cookies.token
 		const decoded = await tokenService.verifyJWT(token)
 		const sessionToken = await tokenService.signJWT(decoded.data)
-	
+		
 		res.status(200).json({sessiontoken:sessionToken, userdata: decoded.data});
 		return sessionToken
 	}
 	catch(err){
 		res.status(403).json({ message: 'Invalid token' });
 	}
+	
 }
 
+export const uploadAvatar = async (req, res) =>{
+	try{
+		const fileKey = req.fileKey;
+		const username = req.params.username
+		userService.uploadAvatar(username, fileKey)		
+	}
+	catch(err){
+		
+		console.log(err)
+		return
+	}
+}
