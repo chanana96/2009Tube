@@ -1,0 +1,1 @@
+This project is the result of me mashing together tens of different libraries and implementations I've never touched or known about before. I plan to remake this once I'm done, and see how much I can improve.
