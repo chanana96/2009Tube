@@ -1,4 +1,4 @@
-import { lightTheme, darkTheme } from './theme';
+import { lightTheme, darkTheme } from '../config/theme';
 import PrimarySearchAppBar from '../components/layouts/navbar_layout';
 import { Outlet } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';

@@ -4,6 +4,7 @@ import { paths } from '@/config/paths';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useAuth } from '@/hooks/useAuth';
 import axios from 'axios';
+
 export const ProtectedRoutes = () => {
 	const { isAuthenticated, isLoading } = useAuth();
 

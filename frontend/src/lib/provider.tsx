@@ -1,23 +1,15 @@
 import { QueryClient, QueryClientProvider, usePrefetchQuery } from '@tanstack/react-query';
 import * as React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
-import { lightTheme, darkTheme } from '../app/theme';
+import { lightTheme, darkTheme } from '../config/theme';
 import { ThemeContext } from '../contexts/theme_context';
 import CssBaseline from '@mui/material/CssBaseline';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useTheme } from '@/hooks/useTheme';
 
 export const Provider = ({ children }: { children: React.ReactNode }) => {
-	const [isDarkTheme, setIsDarkTheme] = React.useState(() => {
-		const savedTheme = localStorage.getItem('darkTheme');
-		return savedTheme !== null ? JSON.parse(savedTheme) : true;
-	});
-	const toggleTheme = () => {
-		setIsDarkTheme((theme: boolean) => {
-			localStorage.setItem('darkTheme', JSON.stringify(!theme));
-			return !theme;
-		});
-	};
+	const { isDarkTheme, toggleTheme } = useTheme();
 	const userSession = sessionStorage.getItem('user');
 
 	const queryClient = new QueryClient({
