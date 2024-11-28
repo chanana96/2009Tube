@@ -24,5 +24,8 @@ export const paths = {
 			path: 'settings',
 			getHref: () => 'settings',
 		},
+		upload: {
+			path: 'upload',
+		},
 	},
 };

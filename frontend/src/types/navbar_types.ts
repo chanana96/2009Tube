@@ -23,4 +23,8 @@ export interface AuthMenuProps {
 	mobileMenuId: string;
 	handleProfileMenuOpen: (event: React.MouseEvent<HTMLElement>) => void;
 	handleMobileMenuOpen: (event: React.MouseEvent<HTMLElement>) => void;
+	avatar: string;
+	handleOpen: () => void;
+	handleClose: () => void;
+	open: boolean;
 }

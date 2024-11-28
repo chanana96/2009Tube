@@ -16,18 +16,24 @@ import type { NavbarProps as Props } from '@/types/navbar_types';
 import { AuthMenu } from '@/components/layouts/AuthMenu';
 import { useNavbarHandlers } from '@/hooks/useNavBarHandlers';
 import { NavbarMenus } from '@/components/layouts/NavbarMenus';
+import UploadModal from '@/features/videos/components/UploadModal';
+import * as React from 'react';
 
 export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props) {
 	const username = sessionStorage.getItem('user');
+	const avatar = sessionStorage.getItem('avatar') || '';
 	const { user } = useAuth();
 	const {
 		anchorEl,
 		mobileMoreAnchorEl,
+		open,
 		handleProfileMenuOpen,
 		handleMobileMenuClose,
 		handleMenuClose,
 		handleLogout,
 		handleMobileMenuOpen,
+		handleOpen,
+		handleClose,
 	} = useNavbarHandlers(logout);
 	const navigate = useNavigate();
 
@@ -86,6 +92,10 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 								handleProfileMenuOpen={handleProfileMenuOpen}
 								mobileMenuId={mobileMenuId}
 								handleMobileMenuOpen={handleMobileMenuOpen}
+								avatar={avatar}
+								handleOpen={handleOpen}
+								handleClose={handleClose}
+								open={open}
 							/>
 						:	<div>
 								<Link to='/auth/login'>

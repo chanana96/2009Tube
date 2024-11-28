@@ -11,6 +11,7 @@ try {
 	
 	console.log('Connection has been established successfully.');
 	sequelize.models.user.sync()
+	sequelize.models.video.sync()
   } catch (error) {
 	console.error('Unable to connect to the database:', error);
   }

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { registerUser, loginUser, isUser, logoutUser,uploadAvatar} from '../controllers/auth_controller';
-import {upload} from '../config/multer_config'
+import { registerUser, loginUser, isUser, logoutUser,uploadAvatar,uploadVideo} from '../controllers/auth_controller';
+import { upload} from '../config/multer_config'
 
 const authRouter = Router();
 
@@ -11,5 +11,7 @@ authRouter.post('/logout', logoutUser)
 authRouter.get('/me', isUser)
 
 authRouter.post('/avatar/:username',upload.single('avatar'), uploadAvatar)
+
+authRouter.post('/upload/:useruuid', upload.single('video'), uploadVideo)
 
 export default authRouter;

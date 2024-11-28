@@ -8,11 +8,12 @@ const URL = process.env.AWS_URL
 export const queryProfile = async (req:Request, res:Response) =>{
 	try{
 		const username = req.params.username
-		const {bio, createdAt, profile_image} = await queryService.findProfile(username)
+		const {bio, createdAt, profile_image, id} = await queryService.findProfile(username)
 		res.status(200).json({ 
 			bio, 
 			createdAt, 
-			profile_image: URL + profile_image 
+			profile_image: URL + profile_image,
+			user_uuid: id
 		  })
 		
 

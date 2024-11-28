@@ -3,14 +3,25 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import type { AuthMenuProps } from '@/types/navbar_types';
 import { Avatar } from '@mui/material';
+import { Button } from '@mui/material';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import BasicModal from '@/features/videos/components/UploadModal';
 export const AuthMenu = ({
 	menuId,
 	handleProfileMenuOpen,
 	mobileMenuId,
 	handleMobileMenuOpen,
+	avatar,
+	handleOpen,
+	handleClose,
+	open,
 }: AuthMenuProps) => {
 	return (
 		<>
+			<IconButton size='large' onClick={handleOpen}>
+				<FileUploadIcon />
+			</IconButton>
+			<BasicModal handleClose={handleClose} open={open} />
 			<IconButton
 				size='large'
 				edge='end'
@@ -19,7 +30,7 @@ export const AuthMenu = ({
 				aria-haspopup='true'
 				onClick={handleProfileMenuOpen}
 				color='inherit'>
-				<Avatar alt='avatar' src='/static/images/avatar/1.jpg' />
+				<Avatar alt='avatar' src={avatar} />
 			</IconButton>
 			<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
 				<IconButton

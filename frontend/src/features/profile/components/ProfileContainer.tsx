@@ -6,17 +6,17 @@ import { getProfile } from '@/features/profile/api/find_profile_api';
 import Card from '@mui/material/Card';
 import { useState } from 'react';
 import { uploadAvatar } from '@/features/profile/api/find_profile_api';
-
+import { useAvatarMutation } from '@/hooks/useAvatar';
 interface ProfileContainerProps {
 	username: string;
 }
 
 export const ProfileContainer = ({ username }: ProfileContainerProps) => {
-	const { data, isLoading, error } = useQuery({
+	const { data, isLoading, error, refetch } = useQuery({
 		queryKey: ['profile', username],
 		queryFn: () => getProfile(username),
 	});
-
+	const { mutate } = useAvatarMutation();
 	if (isLoading) return <CircularProgress />;
 	if (error) return <Navigate to='/404' />;
 
@@ -26,7 +26,10 @@ export const ProfileContainer = ({ username }: ProfileContainerProps) => {
 		if (!event.target.files?.[0]) {
 			return;
 		}
-		await uploadAvatar(event.target.files?.[0], username);
+
+		mutate({ file: event.target.files[0], username });
+		sessionStorage.removeItem('avatar');
+		refetch();
 	};
 
 	return (
