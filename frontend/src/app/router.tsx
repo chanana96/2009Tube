@@ -8,6 +8,7 @@ import { Login } from './routes/auth/login.tsx';
 import { ProtectedRoutes } from '@/lib/auth.tsx';
 import { AccountSettings } from './routes/app/account_settings';
 import { UserProfile } from '@/app/routes/app/user_profile.tsx';
+import { WatchVideo } from '@/app/routes/app/watch_video.tsx';
 
 const authRoutes = [
 	{ path: paths.auth.register.path, element: <Register /> },
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
 				path: 'account',
 				element: <ProtectedRoutes />,
 				children: accountRoutes,
+			},
+			{
+				path: 'watch',
+				element: <WatchVideo />,
 			},
 		],
 	},

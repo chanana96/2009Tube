@@ -1,9 +1,9 @@
-import {  Router } from "express";
-import { queryProfile } from "../controllers/query_controller";
+import { Router } from 'express';
+import { queryProfile, queryVideo } from '../controllers/query_controller';
 
-const queryRouter = Router()
+const queryRouter = Router();
 
-queryRouter.get('/profile/:username', queryProfile )
+queryRouter.get('/profile/:username', queryProfile);
+queryRouter.get('/video/:video_id', queryVideo);
 
-
-export default queryRouter
+export default queryRouter;
