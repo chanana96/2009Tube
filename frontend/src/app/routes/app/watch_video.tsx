@@ -16,12 +16,14 @@ export const WatchVideo = () => {
 		queryFn: async () => await doesVideoExist(video_id),
 	});
 
-	const { video_title, createdAt, url, username } = data ?? {};
-
 	if (isLoading) return <CircularProgress />;
 	if (error) {
 		return <Navigate to='/404' />;
 	}
+	const { message } = data || {};
+	if (message === 'UPLOADING') return <div>Video is still uploading</div>;
+
+	const { video_title, createdAt, url, username } = data || {};
 
 	return (
 		<Card sx={{ maxWidth: 1440, margin: 'auto', boxShadow: 3 }}>

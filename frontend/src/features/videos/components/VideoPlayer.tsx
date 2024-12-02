@@ -20,6 +20,7 @@ export const VideoJS = ({ url }: { url: string }) => {
 		controls: true,
 		responsive: true,
 		fluid: true,
+		techOrder: ['html5'],
 		sources: [
 			{
 				src: url,

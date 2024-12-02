@@ -3,15 +3,17 @@ import fs from 'fs';
 import path from 'path';
 import { s3 } from './s3_config';
 import { promisify } from 'util';
+import { formatDuration } from '../utils/formatDuration';
 
 require('dotenv').config();
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 
 const getVideoLength = async (fullPath: string) => {
-	return new Promise<number>((resolve, reject) => {
+	return new Promise<string>((resolve, reject) => {
 		ffmpeg.ffprobe(fullPath, (err, metadata) => {
 			if (err) reject(err);
-			resolve(metadata.format.duration ?? 0);
+			const roundedDuration = Math.floor(metadata.format.duration!);
+			resolve(formatDuration(roundedDuration) ?? '00:00');
 		});
 	});
 };
@@ -20,7 +22,10 @@ const ffmpegProcess = async (inputPath: string, filename: string) => {
 	return new Promise<void>((resolve, reject) => {
 		ffmpeg(path.join(inputPath, filename))
 			.outputOptions([
-				'-c copy',
+				'-c:v libx264',
+				'-crf 23',
+				'-preset fast',
+				'-c:a copy',
 				'-f hls',
 				'-hls_time 10',
 				'-hls_playlist_type vod',
@@ -28,6 +33,9 @@ const ffmpegProcess = async (inputPath: string, filename: string) => {
 				'-hls_list_size 0',
 			])
 			.output(path.join(inputPath, 'playlist.m3u8'))
+			.on('progress', (progress) => {
+				console.log('Processing: ' + progress.percent + '% done');
+			})
 			.on('end', () => resolve())
 			.on('error', reject)
 			.run();
@@ -52,10 +60,11 @@ export const segmentForHls = async (inputPath: string, filename: string, video_u
 	try {
 		const readdirAsync = promisify(fs.readdir);
 		const video_length = await getVideoLength(path.join(inputPath, filename));
-
+		console.log('video length:', video_length);
 		await ffmpegProcess(inputPath, filename);
+		console.log('ffmpeg process done');
 		await generateThumbnailBuffer(inputPath, filename);
-
+		console.log('thumbnail generation done');
 		await fs.promises.unlink(path.join(inputPath, filename));
 		const files = await readdirAsync(inputPath);
 
@@ -84,7 +93,7 @@ export const segmentForHls = async (inputPath: string, filename: string, video_u
 				}
 			}
 		}
-
+		console.log('s3 upload done');
 		return video_length;
 	} catch (err) {
 		console.error(err);

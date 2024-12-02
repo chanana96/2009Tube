@@ -31,7 +31,7 @@ export default function BasicModal({
 						Name your video
 					</Typography>
 
-					<InputFileUpload />
+					<InputFileUpload handleClose={handleClose} />
 				</Box>
 			</Modal>
 		</div>

@@ -1,9 +1,6 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
 export type NavbarContextType = {
-	open: boolean;
-	handleOpen: () => void;
-	handleClose: () => void;
 	anchorEl: null | HTMLElement;
 	setAnchorEl: (anchorEl: null | HTMLElement) => void;
 	mobileMoreAnchorEl: null | HTMLElement;
@@ -16,3 +13,11 @@ export type NavbarContextType = {
 };
 
 export const NavbarContext = createContext<NavbarContextType | null>(null);
+
+export const useNavbarContext = (): NavbarContextType => {
+	const context = useContext(NavbarContext);
+	if (!context) {
+		throw new Error('useNavbarContext must be used within a NavbarProvider');
+	}
+	return context;
+};

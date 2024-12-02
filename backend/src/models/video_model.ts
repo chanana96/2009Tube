@@ -6,7 +6,9 @@ export interface VideoModel {
 	'video_uuid': string;
 	'video_title': string;
 	'createdAt': Date;
-	'video_length': number;
+	'video_length': string;
+	'rating'?: number;
+	'rating_pool'?: number;
 	'user.username'?: string;
 }
 
@@ -26,8 +28,16 @@ export const Video = sequelize.define(
 			allowNull: false,
 		},
 		video_length: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.STRING,
 			allowNull: false,
+		},
+		rating: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
+		},
+		rating_pool: {
+			type: DataTypes.INTEGER,
+			allowNull: true,
 		},
 	},
 	{

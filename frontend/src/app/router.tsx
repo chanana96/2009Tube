@@ -7,6 +7,7 @@ import { ProtectedRoutes } from '@/lib/auth.tsx';
 import { WatchVideo } from '@/app/routes/app/watch_video.tsx';
 import { lazy } from 'react';
 import { Suspense } from 'react';
+
 const Register = lazy(() => import('./routes/auth/register'));
 const Login = lazy(() => import('./routes/auth/login'));
 const UserProfile = lazy(() => import('@/app/routes/app/user_profile'));

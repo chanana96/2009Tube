@@ -1,7 +1,6 @@
 import { Menu, MenuItem } from '@mui/material';
 import { MENU_POSITION_PROPS } from '@/config/menuposition';
-import { NavbarContext } from '@/contexts/navbar_context';
-import { useContext } from 'react';
+import { useNavbarContext } from '@/contexts/navbar_context';
 
 export const NavbarMenus = () => {
 	const {
@@ -12,11 +11,10 @@ export const NavbarMenus = () => {
 		handleMobileMenuClose,
 		anchorEl,
 		mobileMoreAnchorEl,
-	} = useContext(NavbarContext);
+	} = useNavbarContext();
 
 	const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
 	const menuProps = {
 		...MENU_POSITION_PROPS,
 		id: 'primary-search-account-menu',

@@ -1,5 +1,6 @@
 import { queryService } from '../services/query_service';
 import type { Request, Response } from 'express';
+import { getRedisClient } from '../config/redis_config';
 
 require('dotenv').config();
 
@@ -24,6 +25,16 @@ export const queryProfile = async (req: Request, res: Response) => {
 export const queryVideo = async (req: Request, res: Response) => {
 	try {
 		const video_id = req.params.video_id;
+		console.log(video_id);
+		const redis = await getRedisClient();
+		const cachedVideo = await redis.get(video_id);
+		console.log(cachedVideo);
+		if (cachedVideo) {
+			res.status(200).json({
+				message: 'UPLOADING',
+			});
+			return;
+		}
 		const {
 			video_title,
 			createdAt,
@@ -31,6 +42,7 @@ export const queryVideo = async (req: Request, res: Response) => {
 		} = await queryService.findVideo(video_id);
 
 		res.status(200).json({
+			message: 'OK',
 			video_title,
 			createdAt,
 			url: URL + `Videos/${video_id}/playlist.m3u8`,

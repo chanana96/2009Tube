@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import TextField from '@mui/material/TextField';
-import { uploadVideo } from '@/features/videos/api/video_api';
+import { uploadVideo, uploadVideoGetId } from '@/features/videos/api/video_api';
 import { useNavigate } from 'react-router-dom';
 
 const VisuallyHiddenInput = styled('input')({
@@ -18,7 +18,7 @@ const VisuallyHiddenInput = styled('input')({
 	width: 1,
 });
 
-export default function InputFileUpload() {
+export default function InputFileUpload({ handleClose }: { handleClose: () => void }) {
 	const [file, setFile] = React.useState<File | null>(null);
 	const [title, setTitle] = React.useState('');
 	const navigate = useNavigate();
@@ -34,12 +34,16 @@ export default function InputFileUpload() {
 		e.preventDefault();
 		if (!file || !user_uuid) return;
 
-		const { video_id } = await uploadVideo({
+		const { video_id } = await uploadVideoGetId(user_uuid);
+
+		navigate(`/watch?v=${video_id}`);
+		handleClose();
+		await uploadVideo({
 			useruuid: user_uuid,
 			file: file,
 			title: title,
+			video_id: video_id,
 		});
-		navigate(`/watch?v=${video_id}`);
 	};
 
 	return (

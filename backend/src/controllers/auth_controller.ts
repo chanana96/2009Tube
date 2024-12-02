@@ -6,6 +6,9 @@ import { segmentForHls } from '../config/ffmpeg_config';
 import { s3 } from '../config/s3_config';
 import { nanoid } from 'nanoid';
 import fs from 'fs';
+import { getRedisClient } from '../config/redis_config';
+import type { RedisClientType } from 'redis';
+import type { RedisCommand } from '@redis/client/dist/lib/commands';
 
 require('dotenv').config();
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
@@ -90,21 +93,51 @@ export const uploadAvatar = async (req: Request, res: Response) => {
 	}
 };
 
+export const progressReport = async (req: Request, res: Response) => {
+	const redis = await getRedisClient();
+	await redis.set(req.body.video_id, req.body.progress);
+
+	return;
+};
+
+const cleanup = async (redis: RedisClientType, destination: string, video_uuid: string) => {
+	await Promise.all([fs.promises.rmdir(destination, { recursive: true }), redis.del(video_uuid)]);
+};
 export const uploadVideo = async (req: Request, res: Response) => {
+	const redis = await getRedisClient();
+	let video_uuid: string | null = null;
+	let destination: string | null = null;
 	try {
+		console.log('multer done');
 		if (!req.file) {
 			res.status(400).json({ message: 'No file uploaded' });
 			return;
 		}
 		const { destination, filename } = req.file;
-		const video_uuid = nanoid(10);
 		const user_uuid = req.params.useruuid;
 		const video_title = req.body.title;
+		const video_uuid = req.body.video_id;
 
 		const video_length = await segmentForHls(destination, filename, video_uuid);
 		await userService.uploadVideo({ user_uuid, video_uuid, video_title, video_length });
+		await cleanup(redis as RedisClientType, destination, video_uuid);
+		res.status(200).json({ video_id: video_uuid, message: 'DONE' });
+		console.log('done');
+	} catch (err) {
+		if (destination && video_uuid) {
+			await cleanup(redis as RedisClientType, destination, video_uuid);
+		}
+		res.status(400).json({ message: 'Bad request' });
+		console.log(err);
+		return;
+	}
+};
 
-		await fs.promises.rmdir(destination, { recursive: true });
+export const uploadVideoGetId = async (req: Request, res: Response) => {
+	try {
+		const video_uuid = nanoid(10);
+		const redis = await getRedisClient();
+		await redis.set(video_uuid, 0);
 		res.status(200).json({ video_id: video_uuid });
 	} catch (err) {
 		res.status(400).json({ message: 'Bad request' });

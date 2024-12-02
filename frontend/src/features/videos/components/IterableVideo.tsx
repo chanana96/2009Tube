@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardMedia, Typography, Box, Chip } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { formatDuration } from '@/utils/formatDuration';
 import type { Video } from '@/features/videos/components/LatestUploads';
 
 interface IterableVideoProps {
@@ -34,7 +33,7 @@ export const IterableVideo: React.FC<IterableVideoProps> = ({ video }) => {
 							alt={video.video_title}
 						/>
 						<Chip
-							label={formatDuration(video.video_length)}
+							label={video.video_length}
 							size='small'
 							sx={{
 								position: 'absolute',

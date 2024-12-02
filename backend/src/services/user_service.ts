@@ -1,6 +1,7 @@
 import { User } from '../models/user_model';
 import { Video } from '../models/video_model';
 import type { VideoModel } from '../models/video_model';
+import { formatDuration } from '../utils/formatDuration';
 
 export const userService = {
 	uploadAvatar: async (username: string, fileKey: string) => {

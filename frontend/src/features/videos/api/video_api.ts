@@ -1,17 +1,42 @@
 import axios from 'axios';
-interface video {
+
+interface Video {
 	useruuid: string;
 	file: File;
 	title: string;
+	video_id: string;
 }
 
-export const uploadVideo = async ({ useruuid, file, title = 'Untitled video' }: video) => {
+const progressToUpload = async (progress: number, video_id: string) => {
+	await axios.post('/api/auth/progress', { progress: progress, video_id: video_id });
+};
+
+export const uploadVideo = async ({
+	useruuid,
+	file,
+	title = 'Untitled video',
+	video_id,
+}: Video) => {
 	const formData = new FormData();
 	formData.append('video', file);
 	formData.append('title', title);
+	formData.append('video_id', video_id);
+	const response = await axios.post(`/api/auth/upload/${useruuid}`, formData, {
+		onUploadProgress: (progressEvent) => {
+			if (progressEvent) {
+				let percentCompleted = Math.round(
+					(progressEvent.loaded * 100) / progressEvent.total!,
+				);
+				progressToUpload(percentCompleted, video_id);
+			}
+		},
+	});
 
-	const response = await axios.post(`/api/auth/upload/${useruuid}`, formData);
+	return response.data;
+};
 
+export const uploadVideoGetId = async (useruuid: string) => {
+	const response = await axios.get(`/api/auth/upload/${useruuid}`);
 	return response.data;
 };
 
