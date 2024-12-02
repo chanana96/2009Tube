@@ -22,6 +22,11 @@ export const streamVideo = async (req: Request, res: Response): Promise<void> =>
 		const headParams = { Bucket: BUCKET_NAME, Key: `Videos/${video_id}` };
 
 		const headData = await s3.headObject(headParams);
+		if (!headData.ContentLength) {
+			res.status(404).send('Video not found');
+			throw new Error('Video not found');
+		}
+
 		const fileSize = headData.ContentLength;
 
 		const [start, end] = range.replace(/bytes=/, '').split('-');

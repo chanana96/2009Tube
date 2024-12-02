@@ -1,21 +1,19 @@
 import { IconButton, Box } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import type { AuthMenuProps } from '@/types/navbar_types';
 import { Avatar } from '@mui/material';
-import { Button } from '@mui/material';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import BasicModal from '@/features/videos/components/UploadModal';
-export const AuthMenu = ({
-	menuId,
-	handleProfileMenuOpen,
-	mobileMenuId,
-	handleMobileMenuOpen,
-	avatar,
-	handleOpen,
-	handleClose,
-	open,
-}: AuthMenuProps) => {
+import { NavbarContext } from '@/contexts/navbar_context';
+import { useContext, useState } from 'react';
+
+export const AuthMenu = () => {
+	const avatar = sessionStorage.getItem('avatar') || '';
+	const [open, setOpen] = useState(false);
+	const { setMobileMoreAnchorEl, setAnchorEl } = useContext(NavbarContext);
+	const mobileMenuId = 'primary-search-account-menu-mobile';
+	const menuId = 'primary-search-account-menu';
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
 	return (
 		<>
 			<IconButton size='large' onClick={handleOpen}>
@@ -28,7 +26,7 @@ export const AuthMenu = ({
 				aria-label='account of current user'
 				aria-controls={menuId}
 				aria-haspopup='true'
-				onClick={handleProfileMenuOpen}
+				onClick={(event) => setAnchorEl(event.currentTarget)}
 				color='inherit'>
 				<Avatar alt='avatar' src={avatar} />
 			</IconButton>
@@ -38,7 +36,7 @@ export const AuthMenu = ({
 					aria-label='show more'
 					aria-controls={mobileMenuId}
 					aria-haspopup='true'
-					onClick={handleMobileMenuOpen}
+					onClick={(event) => setMobileMoreAnchorEl(event.currentTarget)}
 					color='inherit'>
 					<MoreIcon />
 				</IconButton>

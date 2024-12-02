@@ -7,6 +7,15 @@ import { promisify } from 'util';
 require('dotenv').config();
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 
+const getVideoLength = async (fullPath: string) => {
+	return new Promise<number>((resolve, reject) => {
+		ffmpeg.ffprobe(fullPath, (err, metadata) => {
+			if (err) reject(err);
+			resolve(metadata.format.duration ?? 0);
+		});
+	});
+};
+
 const ffmpegProcess = async (inputPath: string, filename: string) => {
 	return new Promise<void>((resolve, reject) => {
 		ffmpeg(path.join(inputPath, filename))
@@ -32,7 +41,7 @@ const generateThumbnailBuffer = (inputPath: string, filename: string) => {
 				timestamps: ['50%'],
 				filename: 'thumbnail.jpg',
 				folder: inputPath,
-				size: '320x240',
+				size: '320x200',
 			})
 			.on('end', () => resolve())
 			.on('error', reject);
@@ -42,6 +51,7 @@ const generateThumbnailBuffer = (inputPath: string, filename: string) => {
 export const segmentForHls = async (inputPath: string, filename: string, video_uuid: string) => {
 	try {
 		const readdirAsync = promisify(fs.readdir);
+		const video_length = await getVideoLength(path.join(inputPath, filename));
 
 		await ffmpegProcess(inputPath, filename);
 		await generateThumbnailBuffer(inputPath, filename);
@@ -66,10 +76,16 @@ export const segmentForHls = async (inputPath: string, filename: string, video_u
 						: file.endsWith('.jpg') ? 'image/jpeg'
 						: undefined,
 				});
-			} catch (uploadErr) {
-				console.error(`failed to upload ${file}: ${uploadErr.message}`);
+			} catch (uploadErr: unknown) {
+				if (uploadErr instanceof Error) {
+					console.error(`failed to upload ${file}: ${uploadErr.message}`);
+				} else {
+					console.error(`failed to upload ${file}: ${uploadErr}`);
+				}
 			}
 		}
+
+		return video_length;
 	} catch (err) {
 		console.error(err);
 		throw err;

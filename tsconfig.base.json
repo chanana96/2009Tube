@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"skipLibCheck": true,
+		"incremental": true,
+		"strict": true,
+		"noImplicitAny": true,
+		"esModuleInterop": true,
+		"target": "ES2022",
+		"moduleResolution": "node"
+	},
+	"exclude": ["node_modules", "dist", "build", "**/*.log"]
+}

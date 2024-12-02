@@ -4,6 +4,7 @@ interface video {
 	file: File;
 	title: string;
 }
+
 export const uploadVideo = async ({ useruuid, file, title = 'Untitled video' }: video) => {
 	const formData = new FormData();
 	formData.append('video', file);
@@ -35,5 +36,14 @@ export const doesVideoExist = async (video_id: string) => {
 		return response.data;
 	} catch (error) {
 		console.error('Error fetching video:', error);
+	}
+};
+
+export const fetchVideoFeed = async () => {
+	try {
+		const response = await axios.get('/api/query/video/feed');
+		return response.data;
+	} catch (error) {
+		console.error('Error fetching video feed:', error);
 	}
 };

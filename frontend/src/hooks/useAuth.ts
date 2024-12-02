@@ -10,6 +10,7 @@ interface QueryData {
 }
 
 export const useAuth = () => {
+	console.log('useAuth');
 	const { data, isLoading } = useQuery<QueryData>({
 		queryKey: ['authState'],
 	});

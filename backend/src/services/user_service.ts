@@ -1,5 +1,6 @@
 import { User } from '../models/user_model';
 import { Video } from '../models/video_model';
+import type { VideoModel } from '../models/video_model';
 
 export const userService = {
 	uploadAvatar: async (username: string, fileKey: string) => {
@@ -16,9 +17,14 @@ export const userService = {
 			throw err;
 		}
 	},
-	uploadVideo: async ({ user_uuid, video_uuid, video_title }) => {
+	uploadVideo: async ({
+		user_uuid,
+		video_uuid,
+		video_title,
+		video_length,
+	}: Omit<VideoModel, 'createdAt'>) => {
 		try {
-			await Video.create({ user_uuid, video_uuid, video_title });
+			await Video.create({ user_uuid, video_uuid, video_title, video_length });
 		} catch (err) {
 			throw err;
 		}

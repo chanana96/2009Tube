@@ -7,24 +7,24 @@ import CssBaseline from '@mui/material/CssBaseline';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTheme } from '@/hooks/useTheme';
-import { getProfile } from '@/features/profile/api/find_profile_api';
-import { query } from 'express';
+import { useAuthSession } from '@/hooks/useAuthSession';
+
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: 1,
+			retryDelay: 5,
+			refetchOnMount: true,
+			refetchOnWindowFocus: false,
+			staleTime: 1000 * 60 * 5,
+		},
+	},
+});
 
 export const Provider = ({ children }: { children: React.ReactNode }) => {
 	const { isDarkTheme, toggleTheme } = useTheme();
-	const userSession = sessionStorage.getItem('user');
-	const avatar = sessionStorage.getItem('avatar');
-	const user_uuid = sessionStorage.getItem('user_uuid');
-	const queryClient = new QueryClient({
-		defaultOptions: {
-			queries: {
-				retry: 1,
-				retryDelay: 5,
-				refetchOnMount: true,
-				refetchOnWindowFocus: false,
-			},
-		},
-	});
+
+	const { userSession, avatar, user_uuid } = useAuthSession();
 
 	queryClient.fetchQuery({
 		queryKey: ['authState'],
@@ -57,9 +57,10 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
 		<React.Suspense fallback={<CircularProgress />}>
 			<ThemeContext.Provider value={{ isDarkTheme, toggleTheme }}>
 				<ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
-					<CssBaseline />
-
-					<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+					<QueryClientProvider client={queryClient}>
+						<CssBaseline />
+						{children}
+					</QueryClientProvider>
 				</ThemeProvider>
 			</ThemeContext.Provider>
 		</React.Suspense>

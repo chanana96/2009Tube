@@ -1,12 +1,11 @@
-import { Box, Avatar, Typography, CircularProgress } from '@mui/material';
-import { CameraAltOutlined as CameraAltOutlinedIcon } from '@mui/icons-material';
+import { Box, Typography, CircularProgress } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { Navigate } from 'react-router-dom';
 import { getProfile } from '@/features/profile/api/find_profile_api';
 import Card from '@mui/material/Card';
-import { useState } from 'react';
-import { uploadAvatar } from '@/features/profile/api/find_profile_api';
 import { useAvatarMutation } from '@/hooks/useAvatar';
+import { ProfileAvatar } from '@/features/profile/components/ProfileAvatar';
+
 interface ProfileContainerProps {
 	username: string;
 }
@@ -44,37 +43,7 @@ export const ProfileContainer = ({ username }: ProfileContainerProps) => {
 				}}>
 				<Box sx={{ position: 'absolute', bottom: '-60px', left: '5%' }}>
 					<label htmlFor='avatar' style={{ display: 'block', cursor: 'pointer' }}>
-						<Box
-							sx={{
-								'position': 'relative',
-								'&:hover': {
-									'cursor': 'pointer',
-									'& .avatar-overlay': { opacity: 1 },
-									'& .MuiAvatar-root': { filter: 'brightness(0.8)' },
-								},
-							}}>
-							<Avatar
-								alt='Profile Image'
-								src={profile_image}
-								sx={{ width: 120, height: 120 }}
-							/>
-							<Box
-								className='avatar-overlay'
-								sx={{
-									position: 'absolute',
-									top: 0,
-									left: 0,
-									right: 0,
-									bottom: 0,
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									opacity: 0,
-									transition: 'opacity 0.3s',
-								}}>
-								<CameraAltOutlinedIcon sx={{ color: 'white' }} />
-							</Box>
-						</Box>
+						<ProfileAvatar profile_image={profile_image} />
 					</label>
 					<input
 						type='file'

@@ -1,36 +1,28 @@
 import { useQuery } from '@tanstack/react-query';
-
-import {
-	Card,
-	CardContent,
-	CardMedia,
-	Typography,
-	Grid2,
-	Box,
-	CircularProgress,
-} from '@mui/material';
-
+import { Box, CircularProgress } from '@mui/material';
+import { IterableVideo } from '@/features/videos/components/IterableVideo';
+import Grid from '@mui/material/Grid2';
+import { fetchVideoFeed } from '@/features/videos/api/video_api';
+export type Video = {
+	'video_uuid': string;
+	'video_title': string;
+	'createdAt': string;
+	'user.username': string;
+	'video_length': number;
+};
 const LatestUploads = () => {
+	const { data, isLoading } = useQuery({
+		queryKey: ['feed'],
+		queryFn: async () => fetchVideoFeed(),
+	});
+	if (isLoading) return <CircularProgress />;
 	return (
 		<Box sx={{ padding: 2 }}>
-			<Grid2 container spacing={2}>
-				<Grid2>
-					<Card>
-						<CardMedia
-							component='img'
-							height='140'
-							image={undefined}
-							alt={'video.title'}
-						/>
-						<CardContent>
-							<Typography variant='h6'>{'video.title'}</Typography>
-							<Typography variant='body2' color='text.secondary'>
-								Uploaded on {new Date('video.createdAt').toLocaleDateString()}
-							</Typography>
-						</CardContent>
-					</Card>
-				</Grid2>
-			</Grid2>
+			<Grid container spacing={2} justifyContent='center'>
+				{data.videos.map((video: Video) => (
+					<IterableVideo key={video.video_uuid} video={video} />
+				))}
+			</Grid>
 		</Box>
 	);
 };

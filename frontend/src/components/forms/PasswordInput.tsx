@@ -8,7 +8,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 
 interface PasswordInputProps {
-	control: Control<any>;
+	control: Control;
 	name: string;
 	label: string;
 	rules?: RegisterOptions;

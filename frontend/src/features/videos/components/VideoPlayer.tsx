@@ -1,10 +1,14 @@
 import * as React from 'react';
 import videojs from 'video.js';
+import Player from 'video.js/dist/types/player';
 import 'video.js/dist/video-js.css';
 
 export const VideoJS = ({ url }: { url: string }) => {
 	const videoRef = React.useRef<HTMLDivElement>(null);
-	const playerRef = React.useRef<any | null>(null);
+	const playerRef = React.useRef<Player | null>(null);
+
+	const savedVolume = localStorage.getItem('volume');
+	const savedMuted = localStorage.getItem('muted');
 
 	const videoContainerStyle = {
 		width: '1230px',
@@ -16,7 +20,6 @@ export const VideoJS = ({ url }: { url: string }) => {
 		controls: true,
 		responsive: true,
 		fluid: true,
-
 		sources: [
 			{
 				src: url,
@@ -25,8 +28,17 @@ export const VideoJS = ({ url }: { url: string }) => {
 		],
 	};
 
-	const onReady = (player: any) => {
+	const onReady = (player: Player) => {
 		playerRef.current = player;
+
+		player.volume(savedVolume ? parseFloat(savedVolume) : 0.5);
+		player.muted(savedMuted === 'true');
+
+		player.on('volumechange', () => {
+			const volume = player.volume();
+			localStorage.setItem('muted', String(player.muted()));
+			localStorage.setItem('volume', String(volume));
+		});
 
 		player.on('waiting', () => {});
 

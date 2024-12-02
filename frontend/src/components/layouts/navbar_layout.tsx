@@ -7,40 +7,14 @@ import Typography from '@mui/material/Typography';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import ContrastIcon from '@mui/icons-material/Contrast';
-import { logout } from '@/features/auth/api/auth_api';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
 import { Search, SearchIconWrapper, StyledInputBase } from './Search';
 import type { NavbarProps as Props } from '@/types/navbar_types';
 import { AuthMenu } from '@/components/layouts/AuthMenu';
-import { useNavbarHandlers } from '@/hooks/useNavBarHandlers';
 import { NavbarMenus } from '@/components/layouts/NavbarMenus';
-import UploadModal from '@/features/videos/components/UploadModal';
-import * as React from 'react';
 
 export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props) {
 	const username = sessionStorage.getItem('user');
-	const avatar = sessionStorage.getItem('avatar') || '';
-	const { user } = useAuth();
-	const {
-		anchorEl,
-		mobileMoreAnchorEl,
-		open,
-		handleProfileMenuOpen,
-		handleMobileMenuClose,
-		handleMenuClose,
-		handleLogout,
-		handleMobileMenuOpen,
-		handleOpen,
-		handleClose,
-	} = useNavbarHandlers(logout);
-	const navigate = useNavigate();
-
-	const isMenuOpen = Boolean(anchorEl);
-	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-	const mobileMenuId = 'primary-search-account-menu-mobile';
-	const menuId = 'primary-search-account-menu';
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -54,24 +28,22 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 						sx={{ mr: 2 }}>
 						<MenuIcon />
 					</IconButton>
-
-					<Typography
-						variant='h6'
-						noWrap
-						component='a'
-						href='/'
-						sx={{
-							mr: 2,
-							display: { xs: 'none', md: 'flex' },
-							fontFamily: 'monospace',
-							fontWeight: 700,
-							letterSpacing: '.3rem',
-							color: 'inherit',
-							textDecoration: 'none',
-						}}>
-						LOBSTER
-					</Typography>
-
+					<Link to='/' style={{ textDecoration: 'none' }}>
+						<Typography
+							variant='h6'
+							noWrap
+							sx={{
+								mr: 2,
+								display: { xs: 'none', md: 'flex' },
+								fontFamily: 'monospace',
+								fontWeight: 700,
+								letterSpacing: '.3rem',
+								color: '#ffffff',
+								textDecoration: 'none',
+							}}>
+							LOBSTER
+						</Typography>
+					</Link>
 					<Search>
 						<SearchIconWrapper>
 							<SearchIcon />
@@ -87,16 +59,7 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 							<ContrastIcon />
 						</IconButton>
 						{username ?
-							<AuthMenu
-								menuId={menuId}
-								handleProfileMenuOpen={handleProfileMenuOpen}
-								mobileMenuId={mobileMenuId}
-								handleMobileMenuOpen={handleMobileMenuOpen}
-								avatar={avatar}
-								handleOpen={handleOpen}
-								handleClose={handleClose}
-								open={open}
-							/>
+							<AuthMenu />
 						:	<div>
 								<Link to='/auth/login'>
 									<Button size='large' variant='outlined'>
@@ -113,18 +76,7 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 					</Box>
 				</Toolbar>
 			</AppBar>
-			<NavbarMenus
-				anchorEl={anchorEl}
-				mobileMoreAnchorEl={mobileMoreAnchorEl}
-				handleMenuClose={handleMenuClose}
-				handleLogout={handleLogout}
-				handleMobileMenuClose={handleMobileMenuClose}
-				handleProfileMenuOpen={handleProfileMenuOpen}
-				isMenuOpen={isMenuOpen}
-				isMobileMenuOpen={isMobileMenuOpen}
-				user={user}
-				navigate={navigate}
-			/>
+			<NavbarMenus />
 		</Box>
 	);
 }

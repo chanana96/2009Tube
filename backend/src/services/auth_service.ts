@@ -1,11 +1,20 @@
 import bcrypt from 'bcrypt';
 import { User } from '../models/user_model';
 import { tokenService } from './token_service';
+import type { UserModel } from '../models/user_model';
 
-export const verifyUserPassword = async (username, password) => {
+type UserAuth = {
+	username: string;
+	email: string;
+	password: string;
+};
+
+export const verifyUserPassword = async ({ username, password }: Omit<UserAuth, 'email'>) => {
 	try {
-		const findUserPasswordHash = async (username) => {
-			const user: any = await User.findOne({ where: { username: username } });
+		const findUserPasswordHash = async (username: string) => {
+			const user = (await User.findOne({
+				where: { username: username },
+			})) as UserModel | null;
 
 			if (!user) {
 				throw new Error('Invalid login');
@@ -21,7 +30,7 @@ export const verifyUserPassword = async (username, password) => {
 	}
 };
 export const authService = {
-	registerUserService: async ({ username, email, password }) => {
+	registerUserService: async ({ username, email, password }: UserAuth) => {
 		const saltRounds = 10;
 		try {
 			const hash = await bcrypt.hash(password, saltRounds);
@@ -32,9 +41,9 @@ export const authService = {
 		}
 	},
 
-	loginUserService: async ({ username, password }) => {
+	loginUserService: async ({ username, password }: Omit<UserAuth, 'email'>) => {
 		try {
-			const pass = await verifyUserPassword(username, password);
+			const pass = await verifyUserPassword({ username, password });
 			if (pass) {
 				const refresh = await tokenService.signRefresh(username);
 				const token = await tokenService.signJWT(username);

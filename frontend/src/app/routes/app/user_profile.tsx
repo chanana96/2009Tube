@@ -5,3 +5,5 @@ export const UserProfile = () => {
 	const { username } = useParams();
 	return <ProfileContainer username={username as string} />;
 };
+
+export default UserProfile;

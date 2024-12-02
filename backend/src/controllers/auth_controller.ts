@@ -10,6 +10,10 @@ import fs from 'fs';
 require('dotenv').config();
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
 
+export type Token = {
+	data: string;
+};
+
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const { username, email, password } = req.body;
@@ -32,7 +36,6 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 			sameSite: 'strict',
 		});
 		res.status(200).json({ message: 'Successful login', accessToken: token });
-		return token;
 	} catch (err) {
 		res.status(401).send('Invalid login');
 		next(err);
@@ -56,14 +59,17 @@ export const isUser = async (req: Request, res: Response) => {
 		const sessionToken = await tokenService.signJWT(decoded.data);
 
 		res.status(200).json({ sessiontoken: sessionToken, userdata: decoded.data });
-		return sessionToken;
 	} catch (err) {
 		res.status(403).json({ message: 'Invalid token' });
 	}
 };
 
-export const uploadAvatar = async (req, res) => {
+export const uploadAvatar = async (req: Request, res: Response) => {
 	try {
+		if (!req.file) {
+			res.status(400).json({ message: 'No file uploaded' });
+			return;
+		}
 		const { buffer, originalname, mimetype } = req.file;
 		const fileKey = `${Date.now()}-${originalname}`;
 		const username = req.params.username;
@@ -84,17 +90,19 @@ export const uploadAvatar = async (req, res) => {
 	}
 };
 
-export const uploadVideo = async (req, res) => {
+export const uploadVideo = async (req: Request, res: Response) => {
 	try {
+		if (!req.file) {
+			res.status(400).json({ message: 'No file uploaded' });
+			return;
+		}
 		const { destination, filename } = req.file;
 		const video_uuid = nanoid(10);
 		const user_uuid = req.params.useruuid;
 		const video_title = req.body.title;
 
-		await Promise.all([
-			segmentForHls(destination, filename, video_uuid),
-			userService.uploadVideo({ user_uuid, video_uuid, video_title }),
-		]);
+		const video_length = await segmentForHls(destination, filename, video_uuid);
+		await userService.uploadVideo({ user_uuid, video_uuid, video_title, video_length });
 
 		await fs.promises.rmdir(destination, { recursive: true });
 		res.status(200).json({ video_id: video_uuid });
