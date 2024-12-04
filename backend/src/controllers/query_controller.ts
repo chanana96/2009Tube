@@ -25,10 +25,8 @@ export const queryProfile = async (req: Request, res: Response) => {
 export const queryVideo = async (req: Request, res: Response) => {
 	try {
 		const video_id = req.params.video_id;
-		console.log(video_id);
 		const redis = await getRedisClient();
 		const cachedVideo = await redis.get(video_id);
-		console.log(cachedVideo);
 		if (cachedVideo) {
 			res.status(200).json({
 				message: 'UPLOADING',

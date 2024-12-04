@@ -8,7 +8,7 @@ import { nanoid } from 'nanoid';
 import fs from 'fs';
 import { getRedisClient } from '../config/redis_config';
 import type { RedisClientType } from 'redis';
-import type { RedisCommand } from '@redis/client/dist/lib/commands';
+import {io} from '../app';
 
 require('dotenv').config();
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
@@ -95,10 +95,21 @@ export const uploadAvatar = async (req: Request, res: Response) => {
 
 export const progressReport = async (req: Request, res: Response) => {
 	const redis = await getRedisClient();
-	await redis.set(req.body.video_id, req.body.progress);
 
-	return;
+	const interval = setInterval(async () => {
+		const progress = await redis.get('req.params.video_id');
+		if (progress) {
+		  io.emit(req.params.video_id, progress); 
+		}
+	  }, 1000);
+	  
+	  io.on('disconnect', () => {
+		clearInterval(interval);
+		return;
+	  })
+	 
 };
+
 
 const cleanup = async (redis: RedisClientType, destination: string, video_uuid: string) => {
 	await Promise.all([fs.promises.rmdir(destination, { recursive: true }), redis.del(video_uuid)]);

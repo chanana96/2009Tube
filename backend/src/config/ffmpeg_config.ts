@@ -4,6 +4,7 @@ import path from 'path';
 import { s3 } from './s3_config';
 import { promisify } from 'util';
 import { formatDuration } from '../utils/formatDuration';
+import { getRedisClient } from './redis_config';
 
 require('dotenv').config();
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
@@ -18,7 +19,8 @@ const getVideoLength = async (fullPath: string) => {
 	});
 };
 
-const ffmpegProcess = async (inputPath: string, filename: string) => {
+export const ffmpegProcess = async (inputPath: string, filename: string, video_uuid: string) => {
+	const redis = await getRedisClient();
 	return new Promise<void>((resolve, reject) => {
 		ffmpeg(path.join(inputPath, filename))
 			.outputOptions([
@@ -34,7 +36,11 @@ const ffmpegProcess = async (inputPath: string, filename: string) => {
 			])
 			.output(path.join(inputPath, 'playlist.m3u8'))
 			.on('progress', (progress) => {
+				if (progress.percent){
+				redis.set(video_uuid, progress.percent);
 				console.log('Processing: ' + progress.percent + '% done');
+				}
+				
 			})
 			.on('end', () => resolve())
 			.on('error', reject)
@@ -61,7 +67,7 @@ export const segmentForHls = async (inputPath: string, filename: string, video_u
 		const readdirAsync = promisify(fs.readdir);
 		const video_length = await getVideoLength(path.join(inputPath, filename));
 		console.log('video length:', video_length);
-		await ffmpegProcess(inputPath, filename);
+		await ffmpegProcess(inputPath, filename, video_uuid);
 		console.log('ffmpeg process done');
 		await generateThumbnailBuffer(inputPath, filename);
 		console.log('thumbnail generation done');
