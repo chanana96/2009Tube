@@ -9,6 +9,8 @@ export type Video = {
 	'createdAt': string;
 	'user.username': string;
 	'video_length': number;
+	'rating': number;
+	'rating_pool': number;
 };
 const LatestUploads = () => {
 	const { data, isLoading } = useQuery({

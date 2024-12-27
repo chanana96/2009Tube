@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { FcGoogle } from 'react-icons/fc';
 import { useForm, Controller, SubmitHandler, FieldError } from 'react-hook-form';
 import Alert from '@mui/material/Alert';
 import { loginUserApi } from '@/features/auth/api/auth_api';
@@ -115,9 +114,6 @@ export default function LoginForm() {
 
 				<Button variant='contained' type='submit'>
 					Log in
-				</Button>
-				<Button variant='contained' startIcon={<FcGoogle size={20} />}>
-					Sign in with google
 				</Button>
 			</Box>
 		</div>

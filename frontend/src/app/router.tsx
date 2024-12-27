@@ -12,6 +12,7 @@ const Register = lazy(() => import('./routes/auth/register'));
 const Login = lazy(() => import('./routes/auth/login'));
 const UserProfile = lazy(() => import('@/app/routes/app/user_profile'));
 const AccountSettings = lazy(() => import('./routes/app/account_settings'));
+const Search = lazy(() => import('./routes/app/search'));
 
 const authRoutes = [
 	{ path: paths.auth.register.path, element: <Register /> },
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
 			{
 				path: 'watch',
 				element: <WatchVideo />,
+			},
+			{
+				path: 'search',
+				element: <Search />,
 			},
 		],
 	},

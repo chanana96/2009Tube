@@ -26,6 +26,6 @@ authRouter.post('/progress', progressReport);
 authRouter.get('/upload/:useruuid', uploadVideoGetId);
 authRouter.post('/upload/:useruuid', upload.single('video'), uploadVideo);
 
-authRouter.post('/submit/rating', submitRatingForVideo);
+authRouter.post('/submit/rating/:video_id', submitRatingForVideo);
 
 export default authRouter;

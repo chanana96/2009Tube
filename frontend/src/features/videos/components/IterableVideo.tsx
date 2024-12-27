@@ -7,7 +7,7 @@ interface IterableVideoProps {
 	video: Video;
 }
 
-const BUCKET_URL = import.meta.env.VITE_BUCKET_URL;
+const CLOUDFRONT_URL = import.meta.env.VITE_CLOUDFRONT_URL;
 
 export const IterableVideo: React.FC<IterableVideoProps> = ({ video }) => {
 	return (
@@ -29,7 +29,7 @@ export const IterableVideo: React.FC<IterableVideoProps> = ({ video }) => {
 								height: 200,
 								objectFit: 'cover',
 							}}
-							image={`${BUCKET_URL}${video.video_uuid}/thumbnail.jpg`}
+							image={`${CLOUDFRONT_URL}${video.video_uuid}/thumbnail.jpg`}
 							alt={video.video_title}
 						/>
 						<Chip
@@ -54,6 +54,9 @@ export const IterableVideo: React.FC<IterableVideoProps> = ({ video }) => {
 						<Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
 							Uploaded on {new Date(video.createdAt).toLocaleDateString()} by{' '}
 							{video['user.username']}
+						</Typography>
+						<Typography variant='body2' color='text.secondary' sx={{ mb: 1 }}>
+							{video.rating} out of {video.rating_pool} people liked this video
 						</Typography>
 					</CardContent>
 				</Card>

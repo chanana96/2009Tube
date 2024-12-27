@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
 import Alert from '@mui/material/Alert';
 import validator from 'validator';
@@ -102,9 +101,6 @@ export default function RegisterForm() {
 				/>
 				<Button variant='contained' type='submit'>
 					Sign up
-				</Button>
-				<Button variant='contained' type='submit' startIcon={<FcGoogle size={20} />}>
-					Sign up with Google
 				</Button>
 			</Box>
 		</div>

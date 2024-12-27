@@ -41,6 +41,7 @@ export const queryService = {
 			if (!video) {
 				throw new Error('Video does not exist');
 			}
+
 			return video;
 		} catch (err) {
 			throw err;

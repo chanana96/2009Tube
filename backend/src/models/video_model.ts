@@ -33,11 +33,13 @@ export const Video = sequelize.define(
 		},
 		rating: {
 			type: DataTypes.INTEGER,
-			allowNull: true,
+			allowNull: false,
+			defaultValue: 0,
 		},
 		rating_pool: {
 			type: DataTypes.INTEGER,
-			allowNull: true,
+			allowNull: false,
+			defaultValue: 0,
 		},
 	},
 	{
