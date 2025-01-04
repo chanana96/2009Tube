@@ -72,3 +72,41 @@ export const fetchVideoFeed = async () => {
 		console.error('Error fetching video feed:', error);
 	}
 };
+
+export const fetchSearch = async (searchParams: string) => {
+	try {
+		const response = await axios.get(`/api/query/search/${searchParams}`);
+		return response.data;
+	} catch (error) {
+		console.error('Error fetching search', error);
+	}
+};
+
+export const postComment = async ({
+	comment,
+	user_id,
+	video_id,
+}: {
+	comment: string;
+	user_id: string;
+	video_id: string;
+}) => {
+	try {
+		const response = await axios.post(`/api/auth/submit/comment/${video_id}`, {
+			comment,
+			user_id,
+		});
+		return response.data;
+	} catch (error) {
+		console.error('Error posting comment', error);
+	}
+};
+
+export const getComments = async (video_id: string) => {
+	try {
+		const response = await axios.get(`/api/query/comments/${video_id}`);
+		return response.data;
+	} catch (error) {
+		console.error('Error getting comments', error);
+	}
+};
