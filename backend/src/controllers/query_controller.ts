@@ -66,3 +66,27 @@ export const queryVideoFeed = async (req: Request, res: Response) => {
 		return;
 	}
 };
+
+export const querySearch = async (req: Request, res: Response) => {
+	try {
+		const searchParams = req.params.search_params;
+		const searchResult = await queryService.findSearch(searchParams);
+		res.status(200).json({ searchResult });
+	} catch (e) {
+		console.log(e);
+		res.status(500).send('Error fetching videos');
+		return;
+	}
+};
+
+export const queryComments = async (req: Request, res: Response) => {
+	try {
+		const video_id = req.params.video_id;
+		const comments = await queryService.findComments(video_id);
+		res.status(200).json({ comments });
+	} catch (e) {
+		console.log(e);
+		res.status(500).send('Error fetching videos');
+		return;
+	}
+};

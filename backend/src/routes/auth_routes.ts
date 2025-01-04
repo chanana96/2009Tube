@@ -10,7 +10,7 @@ import {
 	progressReport,
 } from '../controllers/auth_controller';
 import { upload } from '../config/multer_config';
-import { submitRatingForVideo } from '../controllers/watch_controller';
+import { submitRatingForVideo, submitCommentForVideo } from '../controllers/watch_controller';
 
 const authRouter = Router();
 
@@ -27,5 +27,6 @@ authRouter.get('/upload/:useruuid', uploadVideoGetId);
 authRouter.post('/upload/:useruuid', upload.single('video'), uploadVideo);
 
 authRouter.post('/submit/rating/:video_id', submitRatingForVideo);
+authRouter.post('/submit/comment/:video_id', submitCommentForVideo);
 
 export default authRouter;

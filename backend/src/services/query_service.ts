@@ -1,7 +1,9 @@
 import { User } from '../models/user_model';
 import { Video } from '../models/video_model';
+import { VideoComment } from '../models/video_comment_model';
 import type { UserModel } from '../models/user_model';
 import type { VideoModel } from '../models/video_model';
+import { Op, Sequelize } from 'sequelize';
 
 export const queryService = {
 	findProfile: async (username: string) => {
@@ -15,8 +17,8 @@ export const queryService = {
 			}
 
 			return user;
-		} catch (err) {
-			throw err;
+		} catch (e) {
+			throw e;
 		}
 	},
 	findVideo: async (video_id: string) => {
@@ -43,8 +45,8 @@ export const queryService = {
 			}
 
 			return video;
-		} catch (err) {
-			throw err;
+		} catch (e) {
+			throw e;
 		}
 	},
 	findVideoFeed: async () => {
@@ -70,9 +72,82 @@ export const queryService = {
 				throw new Error('Videos not found');
 			}
 			return videos;
-		} catch (err) {
-			console.error(err);
-			throw err;
+		} catch (e) {
+			console.error(e);
+			throw e;
+		}
+	},
+	findSearch: async (searchParams: string) => {
+		try {
+			console.log(searchParams);
+			User.hasMany(Video, { foreignKey: 'user_uuid', sourceKey: 'id' });
+			Video.belongsTo(User, {
+				foreignKey: 'user_uuid',
+				targetKey: 'id',
+			});
+			const searchTerms = searchParams
+				.trim()
+				.split(/\s+/)
+				.filter((term) => term.length > 0)
+				.map((term) => term.replace(/[%_]/g, '\\$&'));
+
+			const videos = await Video.findAll({
+				where: {
+					[Op.or]: searchTerms.map((term) => ({
+						[Op.and]: [
+							Sequelize.where(
+								Sequelize.fn('LOWER', Sequelize.col('video_title')),
+								'LIKE',
+								`%${term.toLowerCase()}%`,
+							),
+						],
+					})),
+				},
+				limit: 10,
+				order: [['createdAt', 'DESC']],
+				include: [
+					{
+						model: User,
+						attributes: ['username'],
+					},
+				],
+				raw: true,
+			});
+			if (!videos) {
+				throw new Error('Videos not found');
+			}
+			console.log(videos);
+			return videos;
+		} catch (e) {
+			console.error(e);
+			throw e;
+		}
+	},
+	findComments: async (video_id: string) => {
+		try {
+			VideoComment.belongsTo(User, {
+				foreignKey: 'user_id',
+				targetKey: 'id',
+			});
+
+			const comments = await VideoComment.findAll({
+				where: {
+					video_uuid: video_id,
+				},
+				include: [
+					{
+						model: User,
+						attributes: ['username', 'profile_image'],
+					},
+				],
+				order: [['createdAt', 'DESC']],
+				raw: true,
+			});
+
+			return comments;
+		} catch (e) {
+			console.error(e);
+			throw e;
 		}
 	},
 };

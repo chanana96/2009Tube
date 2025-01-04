@@ -14,6 +14,7 @@ export const db = async () => {
 		sequelize.models.user.sync();
 		sequelize.models.video.sync();
 		sequelize.models.video_vote.sync();
+		sequelize.models.video_comment.sync();
 	} catch (error) {
 		console.error('Unable to connect to the database:', error);
 	}

@@ -3,11 +3,11 @@ import { Video } from '../models/video_model';
 import { VideoVote } from '../models/video_vote_model';
 import type { VideoModel } from '../models/video_model';
 import { getRedisClient } from '../config/redis_config';
+import { VideoComment } from '../models/video_comment_model';
 
-type submitRatingPayload = {
+type submitPayload = {
 	body: {
 		user_id: string;
-		rating: number;
 	};
 	params: {
 		video_id: string;
@@ -15,7 +15,7 @@ type submitRatingPayload = {
 };
 
 export const watchService = {
-	submitRating: async ({ body, params }: submitRatingPayload) => {
+	submitRating: async ({ body, params }: submitPayload & { body: { rating: number } }) => {
 		const { user_id, rating } = body;
 		const { video_id } = params;
 		try {
@@ -49,6 +49,21 @@ export const watchService = {
 				video_uuid: video_id,
 				rating: rating,
 			});
+		} catch (err) {
+			throw err;
+		}
+	},
+	submitComment: async ({ body, params }: submitPayload & { body: { comment: string } }) => {
+		const { user_id, comment } = body;
+		const { video_id } = params;
+		try {
+			const newComment = await VideoComment.create({
+				user_id: user_id,
+				video_uuid: video_id,
+				comment: comment,
+			});
+
+			return newComment;
 		} catch (err) {
 			throw err;
 		}
