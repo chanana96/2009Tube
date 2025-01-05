@@ -1,10 +1,10 @@
 import { Box, Typography, CircularProgress } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { Navigate } from 'react-router-dom';
-import { getProfile } from '@/features/profile/api/find_profile_api';
+import { getProfile } from '../api/find-profile-api';
 import Card from '@mui/material/Card';
 import { useAvatarMutation } from '@/hooks/useAvatar';
-import { ProfileAvatar } from '@/features/profile/components/ProfileAvatar';
+import { ProfileAvatar } from './ProfileAvatar';
 
 interface ProfileContainerProps {
 	username: string;

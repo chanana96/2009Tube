@@ -1,4 +1,4 @@
-import { ProfileContainer } from '@/features/profile/components/ProfileContainer';
+import { ProfileContainer } from '../components/ProfileContainer';
 import { useParams } from 'react-router-dom';
 
 const UserProfile = () => {

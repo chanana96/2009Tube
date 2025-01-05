@@ -6,7 +6,7 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import { rateVideo } from '../api/watch_api';
+import { rateVideo } from '../api/watch-api';
 import Alert from '@mui/material/Alert';
 
 const StyledRating = styled(Rating)({

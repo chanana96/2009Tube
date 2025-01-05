@@ -1,8 +1,9 @@
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import { api } from '@/config';
 
 export const rateVideo = async (video_id: string, rating: number, user_id: string | null) => {
 	try {
-		const response = await axios.post(`/api/auth/submit/rating/${video_id}`, {
+		const response = await api.post(`/auth/submit/rating/${video_id}`, {
 			rating,
 			user_id,
 		});

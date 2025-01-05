@@ -1,23 +1,14 @@
 import { useSearchParams } from 'react-router-dom';
 import { Box, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import { fetchSearch } from '@/features/videos/api/video_api';
+import { fetchSearch } from '@/features/videos/api/video-api';
 import { useQuery } from '@tanstack/react-query';
-import { IterableVideo } from '../../features/videos/components/IterableVideo';
-
-export type Video = {
-	'video_uuid': string;
-	'video_title': string;
-	'createdAt': string;
-	'user.username': string;
-	'video_length': number;
-	'rating': number;
-	'rating_pool': number;
-};
+import { IterableVideo } from '@/features/videos/components/IterableVideo';
+import { VideoFeedType } from '@/types';
 
 const Search = () => {
 	const [searchParams] = useSearchParams();
-	const search = searchParams.get('q') || '';
+	const search = searchParams.get('q') || ' ';
 	const { data, isLoading } = useQuery({
 		queryKey: ['search', search],
 		queryFn: async () => fetchSearch(search),
@@ -30,7 +21,7 @@ const Search = () => {
 				<div>Nothing matched "{search}"..</div>
 			)}
 			<Grid container spacing={2} justifyContent='center'>
-				{data?.searchResult?.map((video: Video) => (
+				{data?.searchResult?.map((video: VideoFeedType) => (
 					<IterableVideo key={video.video_uuid} video={video} />
 				))}
 			</Grid>

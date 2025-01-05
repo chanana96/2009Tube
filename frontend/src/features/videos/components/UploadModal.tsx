@@ -2,7 +2,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import InputFileUpload from './UploadButton';
-import type { AuthMenuProps } from '@/types/navbar_types';
+import type { AuthMenuProps } from '@/types';
+
 const style = {
 	position: 'absolute',
 	top: '50%',

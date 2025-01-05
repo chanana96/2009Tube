@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import { create } from 'zustand';
 
-export type Notification = {
+export type NotificationType = {
 	id: string;
 	type: 'info' | 'warning' | 'success' | 'error';
 	title: string;
@@ -9,8 +9,8 @@ export type Notification = {
 };
 
 type NotificationsStore = {
-	notifications: Notification[];
-	addNotification: (notification: Omit<Notification, 'id'>) => void;
+	notifications: NotificationType[];
+	addNotification: (notification: Omit<NotificationType, 'id'>) => void;
 	dismissNotification: (id: string) => void;
 };
 

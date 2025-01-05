@@ -10,23 +10,20 @@ import {
 import Grid from '@mui/material/Grid2';
 import { Link } from 'react-router-dom';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useRegister } from '@/lib/auth';
+import { useRegister } from '@/hooks/useAuth';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { registerInputSchema } from '../types';
-import { z } from 'zod';
+import { registerInputSchema, RegisterInput } from '@/lib/schemas';
 import { useFormAlert } from '@/hooks/useFormAlert';
 import { FormAlert } from '@/components/forms/Alert';
 import type { UseFormSetError } from 'react-hook-form';
 
-type Inputs = z.infer<typeof registerInputSchema>;
-
-type RegisterFormProps = {
+export type RegisterFormProps = {
 	onSuccess: () => void;
 	onError: <T>(setError: UseFormSetError<T>) => (errorMessage: string) => void;
 };
 
 export const RegisterForm = ({ onSuccess, onError }: RegisterFormProps) => {
-	const form = useForm<Inputs>({
+	const form = useForm<RegisterInput>({
 		resolver: zodResolver(registerInputSchema),
 	});
 
@@ -35,7 +32,7 @@ export const RegisterForm = ({ onSuccess, onError }: RegisterFormProps) => {
 	const formAlert = useFormAlert(form);
 
 	const registering = useRegister({ onSuccess, onError: onError(setError) });
-	const submitHandler: SubmitHandler<Inputs> = (inputValues) => {
+	const submitHandler: SubmitHandler<RegisterInput> = (inputValues) => {
 		registering.mutate(inputValues);
 	};
 	return (

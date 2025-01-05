@@ -4,10 +4,10 @@ import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid2';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
-import { Comment } from '../types';
+import { VideoCommentType } from '@/types';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import Button from '@mui/material/Button';
-import { postComment, getComments } from '../api/video_api';
+import { postComment, getComments } from '../api/video-api';
 
 export const CommentSection = ({
 	video_id,

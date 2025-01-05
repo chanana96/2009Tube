@@ -2,7 +2,7 @@ import { Navbar } from './Navbar';
 import { useContext } from 'react';
 import { ThemeContext } from '@/contexts/theme_context';
 import { Outlet } from 'react-router-dom';
-import { useUser } from '@/lib/auth';
+import { useUser } from '@/hooks/useAuth';
 
 export const Layout = () => {
 	const { isDarkTheme, toggleTheme } = useContext(ThemeContext);

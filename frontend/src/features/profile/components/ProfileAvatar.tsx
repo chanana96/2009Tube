@@ -1,5 +1,6 @@
-import { Box, Avatar } from '@mui/material';
-import { CameraAltOutlined as CameraAltOutlinedIcon } from '@mui/icons-material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import CameraAltOutlined from '@mui/icons-material/CameraAltOutlined';
 
 export const ProfileAvatar = ({ profile_image }: { profile_image: string }) => {
 	return (
@@ -27,7 +28,7 @@ export const ProfileAvatar = ({ profile_image }: { profile_image: string }) => {
 					opacity: 0,
 					transition: 'opacity 0.3s',
 				}}>
-				<CameraAltOutlinedIcon sx={{ color: 'white' }} />
+				<CameraAltOutlined sx={{ color: 'white' }} />
 			</Box>
 		</Box>
 	);

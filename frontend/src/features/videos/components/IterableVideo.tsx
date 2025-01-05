@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardMedia, Typography, Box, Chip } from '@mui/material';
 import Grid from '@mui/material/Grid2';
-import type { Video } from '@/features/videos/components/LatestUploads';
+import { VideoFeedType } from '@/types';
 
 interface IterableVideoProps {
-	video: Video;
+	video: VideoFeedType;
 }
 
 const CLOUDFRONT_URL = import.meta.env.VITE_CLOUDFRONT_URL;

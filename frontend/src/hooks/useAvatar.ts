@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { uploadAvatar } from '@/features/profile/api/find_profile_api';
+import { uploadAvatar } from '@/features/profile/api/find-profile-api';
 
 export const useAvatarMutation = () => {
 	const queryClient = useQueryClient();

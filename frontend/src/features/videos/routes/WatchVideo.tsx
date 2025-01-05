@@ -1,13 +1,13 @@
 import { useSearchParams } from 'react-router-dom';
 import VideoPlayer from '../components/VideoPlayer';
 import { useQuery } from '@tanstack/react-query';
-import { doesVideoExist } from '@/features/videos/api/video_api';
+import { doesVideoExist } from '../api/video-api';
 import { Navigate } from 'react-router-dom';
 import { CircularProgress, Card, Divider } from '@mui/material';
 import { io } from 'socket.io-client';
-import { VideoInfo } from '@/features/videos/components/VideoInfo';
+import { VideoInfo } from '../components/VideoInfo';
 import { useState, useEffect } from 'react';
-import { CommentSection } from '@/features/videos/components/CommentSection';
+import { CommentSection } from '../components/CommentSection';
 const IO_URL = import.meta.env.VITE_IO_URL;
 
 const WatchVideo = () => {

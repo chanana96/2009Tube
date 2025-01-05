@@ -1,6 +1,6 @@
-import { LoginForm } from '@/features/auth/components/LoginForm';
+import { LoginForm } from '../components/LoginForm';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { paths } from '@/config/paths';
+import { paths } from '@/config';
 
 const Login = () => {
 	const navigate = useNavigate();

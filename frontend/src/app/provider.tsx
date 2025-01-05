@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as React from 'react';
-import { queryConfig } from '@/lib/react-query';
+import { queryConfig } from '@/config/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { NotFound } from './routes/NotFound';
 import { ThemeProvider } from '@mui/material/styles';

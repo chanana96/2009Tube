@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '@/config';
 
 interface Video {
 	useruuid: string;
@@ -8,7 +8,7 @@ interface Video {
 }
 
 const progressToUpload = async (progress: number, video_id: string) => {
-	await axios.post('/api/auth/progress', { progress: progress, video_id: video_id });
+	await api.post('/auth/progress', { progress: progress, video_id: video_id });
 };
 
 export const uploadVideo = async ({
@@ -21,7 +21,7 @@ export const uploadVideo = async ({
 	formData.append('video', file);
 	formData.append('title', title);
 	formData.append('video_id', video_id);
-	const response = await axios.post(`/api/auth/upload/${useruuid}`, formData, {
+	const response = await api.post(`/auth/upload/${useruuid}`, formData, {
 		onUploadProgress: (progressEvent) => {
 			if (progressEvent) {
 				let percentCompleted = Math.round(
@@ -36,13 +36,13 @@ export const uploadVideo = async ({
 };
 
 export const uploadVideoGetId = async (useruuid: string) => {
-	const response = await axios.get(`/api/auth/upload/${useruuid}`);
+	const response = await api.get(`/auth/upload/${useruuid}`);
 	return response.data;
 };
 
 export const fetchVideoChunk = async (start: number, end: number, video_id: string) => {
 	try {
-		const response = await axios.get(`/api/stream/${video_id}`, {
+		const response = await api.get(`/stream/${video_id}`, {
 			headers: {
 				Range: `bytes=${start}-${end}`,
 			},
@@ -57,7 +57,7 @@ export const fetchVideoChunk = async (start: number, end: number, video_id: stri
 
 export const doesVideoExist = async (video_id: string) => {
 	try {
-		const response = await axios.get(`/api/query/video/${video_id}`);
+		const response = await api.get(`/query/video/${video_id}`);
 		return response.data;
 	} catch (error) {
 		console.error('Error fetching video:', error);
@@ -66,7 +66,7 @@ export const doesVideoExist = async (video_id: string) => {
 
 export const fetchVideoFeed = async () => {
 	try {
-		const response = await axios.get('/api/query/video/feed');
+		const response = await api.get('/query/video/feed');
 		return response.data;
 	} catch (error) {
 		console.error('Error fetching video feed:', error);
@@ -75,7 +75,7 @@ export const fetchVideoFeed = async () => {
 
 export const fetchSearch = async (searchParams: string) => {
 	try {
-		const response = await axios.get(`/api/query/search/${searchParams}`);
+		const response = await api.get(`/query/search/${searchParams}`);
 		return response.data;
 	} catch (error) {
 		console.error('Error fetching search', error);
@@ -92,7 +92,7 @@ export const postComment = async ({
 	video_id: string;
 }) => {
 	try {
-		const response = await axios.post(`/api/auth/submit/comment/${video_id}`, {
+		const response = await api.post(`/auth/submit/comment/${video_id}`, {
 			comment,
 			user_id,
 		});
@@ -104,7 +104,7 @@ export const postComment = async ({
 
 export const getComments = async (video_id: string) => {
 	try {
-		const response = await axios.get(`/api/query/comments/${video_id}`);
+		const response = await api.get(`/query/comments/${video_id}`);
 		return response.data;
 	} catch (error) {
 		console.error('Error getting comments', error);

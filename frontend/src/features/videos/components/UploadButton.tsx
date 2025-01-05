@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import TextField from '@mui/material/TextField';
-import { uploadVideo, uploadVideoGetId } from '@/features/videos/api/video_api';
+import { uploadVideo, uploadVideoGetId } from '@/features/videos/api/video-api';
 import { useNavigate } from 'react-router-dom';
 
 const VisuallyHiddenInput = styled('input')({

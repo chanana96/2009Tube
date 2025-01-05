@@ -1,24 +1,65 @@
-import { useQuery } from '@tanstack/react-query';
+import {
+	useMutation,
+	useQueryClient,
+	type UseQueryOptions,
+	useQuery,
+	queryOptions,
+} from '@tanstack/react-query';
+import { authConfig } from '@/config';
 
-interface QueryData {
-	data: {
-		sessiontoken: string;
-		userdata: string;
-	};
-	status: number;
-	statusText: string;
-}
+const { userFn, loginFn, registerFn, logoutFn, userKey = ['user'] } = authConfig;
 
-export const useAuth = () => {
-	console.log('useAuth');
-	const { data, isLoading } = useQuery<QueryData>({
-		queryKey: ['authState'],
+export type UseAuthProps = {
+	onSuccess: () => void;
+	onError?: (errorMessage: string) => void;
+};
+
+export const getUserQueryOptions = () => {
+	return queryOptions({
+		queryKey: userKey,
+		queryFn: userFn,
+	});
+};
+
+export const useUser = (options?: UseQueryOptions) =>
+	useQuery({
+		queryKey: userKey,
+		queryFn: userFn,
+		...options,
 	});
 
-	return {
-		isAuthenticated: data?.status === 200,
-		isLoading,
-		user: data?.data?.userdata,
-		token: data?.data?.sessiontoken,
-	};
+export const useLogin = ({ onSuccess }: UseAuthProps) => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: loginFn,
+		onSuccess: (data) => {
+			queryClient.setQueryData(userKey, data);
+			onSuccess?.();
+		},
+	});
+};
+
+export const useRegister = ({ onSuccess, onError }: UseAuthProps) => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: registerFn,
+		onSuccess: (data) => {
+			queryClient.setQueryData(userKey, data);
+			onSuccess?.();
+		},
+		onError: (error) => {
+			onError!(error.message);
+		},
+	});
+};
+
+export const useLogout = ({ onSuccess }: UseAuthProps) => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: logoutFn,
+		onSuccess: () => {
+			queryClient.setQueryData(userKey, null);
+			onSuccess?.();
+		},
+	});
 };

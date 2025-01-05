@@ -1,17 +1,9 @@
 import { Link } from 'react-router-dom';
-import BasicRating from '@/features/videos/components/BasicRating';
+import BasicRating from './BasicRating';
 import { CardContent, Typography, Box, Stack } from '@mui/material';
+import { VideoDescription } from '@/types';
 
-export type VideoInfoProps = {
-	video_title: string;
-	createdAt: Date;
-	username: string;
-	video_id: string;
-	rating_percentage: number;
-	user_id: string | null;
-};
-
-export const VideoInfo: React.FC<VideoInfoProps> = ({
+export const VideoInfo: React.FC<VideoDescription> = ({
 	video_title,
 	createdAt,
 	username,

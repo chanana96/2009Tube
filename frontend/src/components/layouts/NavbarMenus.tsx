@@ -1,6 +1,6 @@
 import { Menu, MenuItem } from '@mui/material';
-import { useAuth } from '@/hooks/useAuth';
-import { logoutUser } from '@/features/auth/api/auth';
+import { useUser } from '@/hooks/useAuth';
+import { logoutUser } from '@/features/auth/api/auth-api';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { PopoverOrigin } from '@mui/material';
@@ -24,7 +24,7 @@ export const NavbarMenus = () => {
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
 
 	const navigate = useNavigate();
-	const { user } = useAuth();
+	const user = useUser();
 
 	const handleProfileClick = () => {
 		navigate(`/user/profile/${user}`);
