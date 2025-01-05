@@ -33,7 +33,7 @@ export const loginUser = async (data: LoginInput) => {
 	}
 };
 
-export const logout = async () => {
+export const logoutUser = async () => {
 	try {
 		await api.post('/auth/logout', {
 			withCredentials: true,

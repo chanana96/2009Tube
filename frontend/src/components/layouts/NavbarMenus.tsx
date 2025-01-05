@@ -1,9 +1,23 @@
 import { Menu, MenuItem } from '@mui/material';
-import { MENU_POSITION_PROPS } from '@/config/menuposition';
 import { useAuth } from '@/hooks/useAuth';
-import { logout } from '@/features/auth/api/auth';
+import { logoutUser } from '@/features/auth/api/auth';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { PopoverOrigin } from '@mui/material';
+
+const MENU_POSITION_PROPS: {
+	anchorOrigin: PopoverOrigin;
+	transformOrigin: PopoverOrigin;
+} = {
+	anchorOrigin: {
+		vertical: 'top' as const,
+		horizontal: 'right' as const,
+	},
+	transformOrigin: {
+		vertical: 'top' as const,
+		horizontal: 'right' as const,
+	},
+};
 
 export const NavbarMenus = () => {
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -19,7 +33,7 @@ export const NavbarMenus = () => {
 
 	const handleLogout = () => {
 		setAnchorEl(null);
-		logout();
+		logoutUser();
 	};
 	const handleAccountClick = () => {
 		navigate('/account/settings/');

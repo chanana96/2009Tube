@@ -15,10 +15,7 @@ const style = {
 	p: 4,
 };
 
-export default function BasicModal({
-	handleClose,
-	open,
-}: Pick<AuthMenuProps, 'handleClose' | 'open'>) {
+export const UploadModal = ({ handleClose, open }: Pick<AuthMenuProps, 'handleClose' | 'open'>) => {
 	return (
 		<div>
 			<Modal
@@ -36,4 +33,4 @@ export default function BasicModal({
 			</Modal>
 		</div>
 	);
-}
+};

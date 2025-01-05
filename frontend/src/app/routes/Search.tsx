@@ -3,7 +3,7 @@ import { Box, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { fetchSearch } from '@/features/videos/api/video_api';
 import { useQuery } from '@tanstack/react-query';
-import { IterableVideo } from '../../../features/videos/components/IterableVideo';
+import { IterableVideo } from '../../features/videos/components/IterableVideo';
 
 export type Video = {
 	'video_uuid': string;
@@ -37,5 +37,4 @@ const Search = () => {
 		</Box>
 	);
 };
-
 export default Search;

@@ -6,26 +6,38 @@ export const paths = {
 	auth: {
 		register: {
 			path: '/auth/register',
-			getHref: () => '/auth/register',
+			getHref: (redirectTo?: string | null | undefined) =>
+				`/auth/register${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
 		},
 
 		login: {
 			path: '/auth/login',
-			getHref: (redirect: string) => `/auth/login${redirect}`,
+			getHref: (redirectTo?: string | null | undefined) =>
+				`/auth/login${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`,
 		},
 	},
 	user: {
 		profile: {
-			path: 'profile/:username',
+			path: '/user/profile/:username',
+			getHref: () => '/',
 		},
 	},
-	protected: {
-		account: {
-			path: 'settings',
-			getHref: () => 'settings',
-		},
-		upload: {
-			path: 'upload',
+	watch: {
+		path: '/watch',
+		getHref: () => '/',
+	},
+	search: {
+		path: '/search',
+		getHref: () => '/',
+	},
+	account: {
+		settings: {
+			path: '/account/settings',
+			getHref: () => '/account',
 		},
 	},
-};
+	upload: {
+		path: '/upload',
+		getHref: () => '/',
+	},
+} as const;

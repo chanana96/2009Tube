@@ -1,65 +1,74 @@
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import { paths } from '../config/paths.ts';
-import App from './App.tsx';
-import { NotFound } from './routes/NotFound.tsx';
-import { ProtectedRoutes } from '@/lib/auth.tsx';
-import { WatchVideo } from '@/app/routes/app/watch_video.tsx';
+import { paths } from '@/config/paths.ts';
+import { NotFound } from './routes/NotFound';
+import { ProtectedRoute } from '@/lib/auth';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMemo, Suspense, lazy } from 'react';
+import { useMemo, Suspense } from 'react';
 import type { QueryClient } from '@tanstack/react-query';
 import { Layout } from '@/components/layouts/Layout';
 
-const AccountSettings = lazy(() => import('./routes/app/account_settings'));
-const Search = lazy(() => import('./routes/app/search'));
-
-const accountRoutes = [
-	{
-		path: paths.protected.account.path,
-		element: (
-			<Suspense fallback={<div>Loading...</div>}>
-				<AccountSettings />
-			</Suspense>
-		),
-	},
-];
+const convert = (queryClient: QueryClient) => (m: any) => {
+	const { clientLoader, clientAction, default: Component, ...rest } = m;
+	return {
+		...rest,
+		loader: clientLoader?.(queryClient),
+		action: clientAction?.(queryClient),
+		Component,
+	};
+};
 
 const createAppRouter = (queryClient: QueryClient) =>
 	createBrowserRouter([
 		{
-			element: (
-				<Layout>
-					<Outlet />
-				</Layout>
-			),
+			element: <Layout />,
 			errorElement: <NotFound />,
 			hydrateFallbackElement: <Suspense />,
 			children: [
 				{
 					index: true,
-					lazy: async () => {
-						const { Index } = await import('./routes/Index');
-						return { Component: Index };
-					},
+					lazy: () => import('./routes/Index').then(convert(queryClient)),
 				},
 				{
 					path: paths.auth.register.path,
-					lazy: async () => {
-						const { Register } = await import('../features/auth/routes/Register.tsx');
-						return { Component: Register };
-					},
+					lazy: () =>
+						import('@/features/auth/routes/Register').then(convert(queryClient)),
 				},
 				{
 					path: paths.auth.login.path,
-					lazy: async () => {
-						const { Login } = await import('../features/auth/routes/Login.tsx');
-						return { Component: Login };
-					},
+					lazy: () => import('@/features/auth/routes/Login').then(convert(queryClient)),
 				},
+
 				{
 					path: paths.user.profile.path,
+					lazy: () =>
+						import('@/features/profile/routes/UserProfile').then(convert(queryClient)),
+				},
+				{
+					path: paths.watch.path,
+					lazy: () =>
+						import('@/features/videos/routes/WatchVideo').then(convert(queryClient)),
+				},
+
+				{
+					path: paths.search.path,
+					lazy: () => import('@/app/routes/Search').then(convert(queryClient)),
+				},
+			],
+		},
+		{
+			element: (
+				<ProtectedRoute>
+					<Outlet />
+				</ProtectedRoute>
+			),
+			children: [
+				{
+					path: paths.account.settings.path,
 					lazy: async () => {
-						const { UserProfile } = await import('./routes/user/UserProfile');
-						return { Component: UserProfile };
+						const { AccountSettings } = await import(
+							'@/features/account/routes/AccountSettings'
+						);
+						return { Component: AccountSettings };
 					},
 				},
 			],

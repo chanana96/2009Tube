@@ -2,7 +2,7 @@ import { IconButton, Box } from '@mui/material';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Avatar } from '@mui/material';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import BasicModal from '@/features/videos/components/UploadModal';
+import { UploadModal } from '@/features/videos/components/UploadModal';
 import { useNavbarContext } from '@/contexts/navbar_context';
 import { useState } from 'react';
 
@@ -21,7 +21,7 @@ export const AuthMenu = () => {
 			<IconButton size='large' onClick={handleOpen}>
 				<FileUploadIcon />
 			</IconButton>
-			<BasicModal handleClose={handleClose} open={open} />
+			<UploadModal handleClose={handleClose} open={open} />
 			<IconButton
 				size='large'
 				edge='end'

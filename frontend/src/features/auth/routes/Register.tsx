@@ -3,12 +3,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { paths } from '@/config/paths';
 import type { UseFormSetError } from 'react-hook-form';
 
-export const Register = () => {
+const Register = () => {
 	const navigate = useNavigate();
 	const [searchParams] = useSearchParams();
 	const redirectTo = searchParams.get('redirectTo');
 	const onSuccess = () => {
-		navigate(`${redirectTo ? `${redirectTo}` : '/'}`, {
+		navigate(`${redirectTo ? `${redirectTo}` : paths.home.path}`, {
 			replace: true,
 		});
 	};
@@ -26,3 +26,5 @@ export const Register = () => {
 		</>
 	);
 };
+
+export default Register;

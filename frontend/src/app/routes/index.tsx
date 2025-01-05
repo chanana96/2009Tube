@@ -2,7 +2,7 @@ import Stack from '@mui/material/Stack';
 
 import LatestUploads from '@/features/videos/components/LatestUploads';
 
-export const Index = () => {
+const Index = () => {
 	return (
 		<>
 			<Stack direction='row' spacing={2} alignItems='center'>
@@ -11,3 +11,4 @@ export const Index = () => {
 		</>
 	);
 };
+export default Index;

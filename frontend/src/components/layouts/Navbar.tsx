@@ -16,9 +16,10 @@ import { AuthMenu } from './AuthMenu';
 type NavbarProps = {
 	toggleTheme: () => void;
 	isDarkTheme: boolean;
+	user: any;
 };
 
-export const Navbar = ({ toggleTheme, isDarkTheme }: NavbarProps) => {
+export const Navbar = ({ toggleTheme, isDarkTheme, user }: NavbarProps) => {
 	const [search, setSearch] = useState('');
 	const navigate = useNavigate();
 	const username = sessionStorage.getItem('user');

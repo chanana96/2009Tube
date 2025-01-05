@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import VideoPlayer from '../../../features/videos/components/VideoPlayer';
+import VideoPlayer from '../components/VideoPlayer';
 import { useQuery } from '@tanstack/react-query';
 import { doesVideoExist } from '@/features/videos/api/video_api';
 import { Navigate } from 'react-router-dom';
@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import { CommentSection } from '@/features/videos/components/CommentSection';
 const IO_URL = import.meta.env.VITE_IO_URL;
 
-export const WatchVideo = () => {
+const WatchVideo = () => {
 	const [searchParams] = useSearchParams();
 	const video_id = searchParams.get('v') || '';
 	const [progress, setProgress] = useState(0);
@@ -56,3 +56,4 @@ export const WatchVideo = () => {
 		</Card>
 	);
 };
+export default WatchVideo;
