@@ -1,20 +1,24 @@
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import { Button } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import SearchIcon from '@mui/icons-material/Search';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import ContrastIcon from '@mui/icons-material/Contrast';
+import SearchIcon from '@mui/icons-material/Search';
 import { Link } from 'react-router-dom';
-import { Search, SearchIconWrapper, StyledInputBase } from './Search';
-import type { NavbarProps as Props } from '@/types/navbar_types';
-import { AuthMenu } from '@/components/layouts/AuthMenu';
-import { NavbarMenus } from '@/components/layouts/NavbarMenus';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { NavbarMenus } from './NavbarMenus';
+import { Search, SearchIconWrapper, StyledInputBase } from './Search';
+import { AuthMenu } from './AuthMenu';
 
-export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props) {
+type NavbarProps = {
+	toggleTheme: () => void;
+	isDarkTheme: boolean;
+};
+
+export const Navbar = ({ toggleTheme, isDarkTheme }: NavbarProps) => {
 	const [search, setSearch] = useState('');
 	const navigate = useNavigate();
 	const username = sessionStorage.getItem('user');
@@ -25,7 +29,7 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 	};
 
 	return (
-		<Box sx={{ flexGrow: 1 }}>
+		<Box className='flex-grow'>
 			<AppBar position='fixed'>
 				<Toolbar>
 					<Link to='/' style={{ textDecoration: 'none' }}>
@@ -90,4 +94,4 @@ export default function PrimarySearchAppBar({ toggleTheme, isDarkTheme }: Props)
 			<NavbarMenus />
 		</Box>
 	);
-}
+};

@@ -1,34 +1,16 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { paths } from '../config/paths.ts';
 import App from './App.tsx';
-import Index from './routes/index.tsx';
-import { NotFoundRoute } from './routes/not_found.tsx';
+import { NotFound } from './routes/NotFound.tsx';
 import { ProtectedRoutes } from '@/lib/auth.tsx';
 import { WatchVideo } from '@/app/routes/app/watch_video.tsx';
-import { lazy } from 'react';
-import { Suspense } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useMemo, Suspense, lazy } from 'react';
+import type { QueryClient } from '@tanstack/react-query';
+import { Layout } from '@/components/layouts/Layout';
 
-const Register = lazy(() => import('./routes/auth/register'));
-const Login = lazy(() => import('./routes/auth/login'));
-const UserProfile = lazy(() => import('@/app/routes/app/user_profile'));
 const AccountSettings = lazy(() => import('./routes/app/account_settings'));
 const Search = lazy(() => import('./routes/app/search'));
-
-const authRoutes = [
-	{ path: paths.auth.register.path, element: <Register /> },
-	{ path: paths.auth.login.path, element: <Login /> },
-];
-
-const userRoutes = [
-	{
-		path: paths.user.profile.path,
-		element: (
-			<Suspense fallback={<div>Loading...</div>}>
-				<UserProfile />
-			</Suspense>
-		),
-	},
-];
 
 const accountRoutes = [
 	{
@@ -41,31 +23,51 @@ const accountRoutes = [
 	},
 ];
 
-export const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <App />,
-		errorElement: <NotFoundRoute />,
-		children: [
-			{ index: true, element: <Index /> },
-			...authRoutes,
-			{
-				path: 'user',
-				children: userRoutes,
-			},
-			{
-				path: 'account',
-				element: <ProtectedRoutes />,
-				children: accountRoutes,
-			},
-			{
-				path: 'watch',
-				element: <WatchVideo />,
-			},
-			{
-				path: 'search',
-				element: <Search />,
-			},
-		],
-	},
-]);
+const createAppRouter = (queryClient: QueryClient) =>
+	createBrowserRouter([
+		{
+			element: (
+				<Layout>
+					<Outlet />
+				</Layout>
+			),
+			errorElement: <NotFound />,
+			hydrateFallbackElement: <Suspense />,
+			children: [
+				{
+					index: true,
+					lazy: async () => {
+						const { Index } = await import('./routes/Index');
+						return { Component: Index };
+					},
+				},
+				{
+					path: paths.auth.register.path,
+					lazy: async () => {
+						const { Register } = await import('../features/auth/routes/Register.tsx');
+						return { Component: Register };
+					},
+				},
+				{
+					path: paths.auth.login.path,
+					lazy: async () => {
+						const { Login } = await import('../features/auth/routes/Login.tsx');
+						return { Component: Login };
+					},
+				},
+				{
+					path: paths.user.profile.path,
+					lazy: async () => {
+						const { UserProfile } = await import('./routes/user/UserProfile');
+						return { Component: UserProfile };
+					},
+				},
+			],
+		},
+	]);
+
+export const AppRouter = () => {
+	const queryClient = useQueryClient();
+	const router = useMemo(() => createAppRouter(queryClient), [queryClient]);
+	return <RouterProvider router={router} />;
+};

@@ -1,7 +1,7 @@
 # Lobstertube - Video Sharing Platform
 
-A modern video sharing platform built with React and Node.js, featuring video uploading, streaming,
-and social features.
+Video sharing platform inspired by 2007 Youtube - built with React and Node.js, featuring video
+uploading, streaming, and social features.
 
 ## Features
 
@@ -42,36 +42,6 @@ and social features.
 - Redis caching layer
 - Docker containerization
 - Jest for testing
-
-## Getting Started
-
-```sh
-# Install dependencies
-npm install
-
-# Start development servers
-# Frontend
-cd frontend
-npm run dev
-
-# Backend
-cd backend
-npm run dev
-```
-
-## Environment Variables
-
-Create `.env` files in both frontend and backend directories. See `.env.example` for required
-variables.
-
-## API Documentation
-
-The API provides endpoints for:
-
-- User authentication
-- Video upload and management
-- Profile management
-- Video streaming
 
 ## License
 

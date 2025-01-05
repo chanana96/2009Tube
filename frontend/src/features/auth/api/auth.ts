@@ -1,14 +1,15 @@
-import axios from 'axios';
-import type { Inputs, RegisterValidationError } from '../types';
 import { AxiosError } from 'axios';
+import { api } from '@/config/axios';
+import { AuthResponse, User, RegisterInput, LoginInput } from '../types';
 
-export const registerUserApi = async ({ email, username, password }: Inputs) => {
+export const getUser = async (): Promise<User> => {
+	const response = (await api.get('/auth/me')) as { data: User };
+	return response.data;
+};
+
+export const registerUser = async (data: RegisterInput) => {
 	try {
-		const response = await axios.post('/api/auth/register', {
-			username,
-			email,
-			password,
-		});
+		const response = await api.post('/auth/register', data);
 		return response.data;
 	} catch (err: unknown) {
 		if (err instanceof AxiosError) {
@@ -21,13 +22,9 @@ export const registerUserApi = async ({ email, username, password }: Inputs) => 
 	}
 };
 
-export const loginUserApi = async ({ username, password }: Omit<Inputs, 'email'>) => {
+export const loginUser = async (data: LoginInput) => {
 	try {
-		const response = await axios.post('/api/auth/login', {
-			username,
-			password,
-		});
-		console.log(response);
+		const response = await api.post('/auth/login', data);
 		return response.data;
 	} catch (err) {
 		if (err instanceof AxiosError) {
@@ -38,7 +35,7 @@ export const loginUserApi = async ({ username, password }: Omit<Inputs, 'email'>
 
 export const logout = async () => {
 	try {
-		await axios.post('/api/auth/logout', {
+		await api.post('/auth/logout', {
 			withCredentials: true,
 		});
 		sessionStorage.clear();

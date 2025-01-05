@@ -1,21 +1,29 @@
-export interface Inputs {
-	email: string;
-	username: string;
-	password: string;
-}
+import { z } from 'zod';
 
-interface FormErrorField {
-	field: 'username' | 'email' | 'password';
-}
+export const registerInputSchema = z
+	.object({
+		Username: z.string().min(3, 'Username must be at least 3 characters').default(''),
+		Email: z.string().min(1, 'Email is required.').default(''),
+		Password: z.string().min(8, 'Password must be at least 8 letters.').default(''),
+		ConfirmPassword: z.string().default(''),
+		AllowEmails: z.boolean().default(false),
+	})
+	.refine((input) => input.Password == input.ConfirmPassword, {
+		message: 'Passwords do not match.',
+		path: ['ConfirmPassword'],
+	});
 
-type SequelizeErrorTypes = 'SequelizeUniqueConstraintError';
+export const loginInputSchema = z.object({
+	Email: z.string().min(1, 'Required').email('Invalid email'),
+	Password: z.string().min(5, 'Required'),
+});
 
-export interface RegisterValidationError {
-	type: SequelizeErrorTypes;
-	field: FormErrorField;
-}
+export type RegisterInput = z.infer<typeof registerInputSchema>;
+export type LoginInput = z.infer<typeof loginInputSchema>;
 
-export type FormValues = {
-	username: string;
-	password: string;
+export type User = {};
+
+export type AuthResponse = {
+	Token: string;
+	User: User;
 };

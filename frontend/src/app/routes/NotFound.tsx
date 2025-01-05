@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Box, Typography, Button, Stack } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-export const NotFoundRoute = () => {
+export const NotFound = () => {
 	return (
 		<Box
 			sx={{

@@ -13,17 +13,17 @@ export type Video = {
 	'rating_pool': number;
 };
 const LatestUploads = () => {
-	const { data, isLoading } = useQuery({
-		queryKey: ['feed'],
-		queryFn: async () => fetchVideoFeed(),
-	});
-	if (isLoading) return <CircularProgress />;
+	// const { data, isLoading } = useQuery({
+	// 	queryKey: ['feed'],
+	// 	queryFn: async () => fetchVideoFeed(),
+	// });
+	// if (isLoading) return <CircularProgress />;
 	return (
 		<Box sx={{ padding: 2 }}>
 			<Grid container spacing={2} justifyContent='center'>
-				{data.videos.map((video: Video) => (
+				{/* {data.videos.map((video: Video) => (
 					<IterableVideo key={video.video_uuid} video={video} />
-				))}
+				))} */}
 			</Grid>
 		</Box>
 	);
