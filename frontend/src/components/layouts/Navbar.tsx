@@ -46,7 +46,7 @@ export const Navbar = ({ toggleTheme, isDarkTheme, user }: NavbarProps) => {
 								color: '#ffffff',
 								textDecoration: 'none',
 							}}>
-							LOBSTER
+							2009Tube
 						</Typography>
 					</Link>
 					<Search>

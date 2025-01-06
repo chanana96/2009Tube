@@ -30,7 +30,7 @@ export default function BasicRating({ video_id, user_id }: { video_id: string; u
 		dislike: 0,
 	});
 	const [ratingSuccess, setRatingSuccess] = React.useState<boolean | null>(null);
-
+	//todo change to star based rating
 	const handleClick = async (e: React.MouseEvent, rating: string) => {
 		e.preventDefault();
 		let like = 0;

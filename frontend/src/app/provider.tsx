@@ -9,7 +9,7 @@ import { ThemeContext } from '@/contexts/theme_context';
 import CssBaseline from '@mui/material/CssBaseline';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTheme } from '@/hooks/useTheme';
-
+import { Notifications } from '@/components/ui/Notifications';
 type AppProviderProps = {
 	children: React.ReactNode;
 };
@@ -29,6 +29,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 					<ErrorBoundary FallbackComponent={NotFound}>
 						<QueryClientProvider client={queryClient}>
 							<CssBaseline />
+							<Notifications />
 							{children}
 						</QueryClientProvider>
 					</ErrorBoundary>

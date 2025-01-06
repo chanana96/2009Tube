@@ -1,6 +1,6 @@
-# Lobstertube - Video Sharing Platform
+# 2009Tube - Video Sharing Platform
 
-Video sharing platform inspired by 2007 Youtube - built with React and Node.js, featuring video
+Video sharing platform inspired by 2009 Youtube - built with React and Node.js, featuring video
 uploading, streaming, and social features.
 
 ## Features

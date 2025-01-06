@@ -71,6 +71,7 @@ export const queryService = {
 			if (!videos) {
 				throw new Error('Videos not found');
 			}
+			console.log(videos);
 			return videos;
 		} catch (e) {
 			console.error(e);
