@@ -8,7 +8,8 @@ import { useFormAlert } from '@/hooks/useFormAlert';
 import { FormAlert } from '@/components/forms/Alert';
 import Grid from '@mui/material/Grid2';
 import { NewUsernameOrPasswordInput, newUsernameOrPasswordInputSchema } from '@/lib/schemas';
-//todo
+import { useUpdateSettings } from '../api/update-settings-api';
+
 type SettingsFormProps = {
 	onSuccess: () => void;
 };
@@ -20,9 +21,9 @@ export const SettingsForm = ({ onSuccess }: SettingsFormProps) => {
 	const { register, handleSubmit, setError } = form;
 	const formAlert = useFormAlert(form);
 
-	const registering = useLogin({ onSuccess });
+	const update = useUpdateSettings({ onSuccess });
 	const submitHandler: SubmitHandler<NewUsernameOrPasswordInput> = (inputValues) => {
-		registering.mutate(inputValues);
+		update.mutate(inputValues);
 	};
 
 	return (
@@ -41,21 +42,21 @@ export const SettingsForm = ({ onSuccess }: SettingsFormProps) => {
 							className='flex items-center justify-center mb-2'>
 							<Grid className='w-full md:w-full xs:w-2/3'>
 								<TextField
-									{...register('Username')}
-									label='Email'
+									{...register('newUsername')}
+									label='New username'
 									variant='outlined'
 									fullWidth
 									required
 									autoFocus
-									autoComplete='email'
+									autoComplete='username'
 									type='text'
 									className='w-full'
 								/>
 							</Grid>
 							<Grid className='w-full md:w-full xs:w-2/3'>
 								<TextField
-									{...register('Password')}
-									label='Password'
+									{...register('oldPassword')}
+									label='Old password'
 									variant='outlined'
 									fullWidth
 									required
@@ -67,8 +68,8 @@ export const SettingsForm = ({ onSuccess }: SettingsFormProps) => {
 
 							<Grid className='w-full md:w-full xs:w-2/3'>
 								<TextField
-									{...register('Password')}
-									label='Password'
+									{...register('newPassword')}
+									label='New password'
 									variant='outlined'
 									fullWidth
 									required
@@ -80,8 +81,8 @@ export const SettingsForm = ({ onSuccess }: SettingsFormProps) => {
 
 							<Grid className='w-full md:w-full xs:w-2/3'>
 								<TextField
-									{...register('Password')}
-									label='Password'
+									{...register('confirmNewPassword')}
+									label='Confirm new password'
 									variant='outlined'
 									fullWidth
 									required

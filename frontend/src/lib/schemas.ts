@@ -42,6 +42,11 @@ export const newUsernameOrPasswordInputSchema = z
 		path: ['ConfirmPassword'],
 	});
 
+export const postCommentInputSchema = z.object({
+	body: z.string().min(1, 'Required'),
+});
+
 export type RegisterInput = z.infer<typeof registerInputSchema>;
 export type LoginInput = z.infer<typeof loginInputSchema>;
 export type NewUsernameOrPasswordInput = z.infer<typeof newUsernameOrPasswordInputSchema>;
+export type PostCommentInput = z.infer<typeof postCommentInputSchema>;

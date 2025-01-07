@@ -2,9 +2,9 @@ import { useQuery, queryOptions } from '@tanstack/react-query';
 
 import { api } from '@/config';
 import { QueryConfigType } from '@/config';
-import { VideoDescription } from '@/types';
+import { Video } from '@/types';
 
-export const getVideo = ({ videoId }: { videoId: string }): Promise<{ data: VideoDescription }> => {
+export const getVideo = ({ videoId }: { videoId: string }): Promise<Video> => {
 	return api.get(`/query/video/${videoId}`);
 };
 

@@ -10,7 +10,6 @@ export const db = async () => {
 		await sequelize.authenticate();
 
 		console.log('Connection has been established successfully.');
-
 		sequelize.models.user.sync();
 		sequelize.models.video.sync();
 		sequelize.models.video_vote.sync();

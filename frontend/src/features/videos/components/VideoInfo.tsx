@@ -7,9 +7,7 @@ export const VideoInfo: React.FC<VideoDescription> = ({
 	video_title,
 	createdAt,
 	username,
-	video_id,
 	rating_percentage,
-	user_id,
 }) => {
 	return (
 		<CardContent>
@@ -28,7 +26,7 @@ export const VideoInfo: React.FC<VideoDescription> = ({
 						color='text.secondary'>
 						{rating_percentage}% likes
 					</Typography>
-					{user_id && <BasicRating video_id={video_id} user_id={user_id} />}
+					{/* {user_id && <BasicRating video_id={video_id} user_id={user_id} />}
 					{!user_id && (
 						<Typography
 							variant='body2'
@@ -36,7 +34,7 @@ export const VideoInfo: React.FC<VideoDescription> = ({
 							color='text.secondary'>
 							<Link to='/auth/login'>Login</Link> to vote
 						</Typography>
-					)}
+					)} */}
 				</Stack>
 			</Box>
 			<Typography variant='body2' sx={{ color: 'text.secondary' }}>

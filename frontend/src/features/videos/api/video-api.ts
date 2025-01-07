@@ -40,58 +40,11 @@ export const uploadVideoGetId = async (useruuid: string) => {
 	return response.data;
 };
 
-export const doesVideoExist = async (video_id: string) => {
-	try {
-		const response = await api.get(`/query/video/${video_id}`);
-		return response.data;
-	} catch (error) {
-		console.error('Error fetching video:', error);
-	}
-};
-
-export const fetchVideoFeed = async () => {
-	try {
-		const response = await api.get('/query/video/feed');
-		return response.data;
-	} catch (error) {
-		console.error('Error fetching video feed:', error);
-	}
-};
-
 export const fetchSearch = async (searchParams: string) => {
 	try {
 		const response = await api.get(`/query/search/${searchParams}`);
 		return response.data;
 	} catch (error) {
 		console.error('Error fetching search', error);
-	}
-};
-
-export const postComment = async ({
-	comment,
-	user_id,
-	video_id,
-}: {
-	comment: string;
-	user_id: string;
-	video_id: string;
-}) => {
-	try {
-		const response = await api.post(`/auth/submit/comment/${video_id}`, {
-			comment,
-			user_id,
-		});
-		return response.data;
-	} catch (error) {
-		console.error('Error posting comment', error);
-	}
-};
-
-export const getComments = async (video_id: string) => {
-	try {
-		const response = await api.get(`/query/comments/${video_id}`);
-		return response.data;
-	} catch (error) {
-		console.error('Error getting comments', error);
 	}
 };

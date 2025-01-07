@@ -19,6 +19,8 @@ authRouter.post('/register', registerUser);
 authRouter.post('/login', loginUser);
 authRouter.post('/logout', logoutUser);
 
+// authRouter.post('/update');
+
 authRouter.get('/me', isUserSignedIn, isUser);
 
 authRouter.post('/avatar/:username', upload.single('avatar'), uploadAvatar);

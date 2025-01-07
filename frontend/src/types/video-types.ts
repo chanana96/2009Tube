@@ -20,7 +20,13 @@ export type VideoDescription = {
 	video_title: string;
 	createdAt: Date;
 	username: string;
-	video_id: string;
 	rating_percentage: number;
-	user_id: string | null;
+};
+
+export type Video = {
+	url: string;
+	video_title: string;
+	createdAt: Date;
+	username: string;
+	rating_percentage: number;
 };

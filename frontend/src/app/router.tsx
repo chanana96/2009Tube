@@ -53,23 +53,23 @@ const createAppRouter = (queryClient: QueryClient) =>
 					path: paths.search.path,
 					lazy: () => import('@/app/routes/Search').then(convert(queryClient)),
 				},
-			],
-		},
-		{
-			element: (
-				<ProtectedRoute>
-					<Outlet />
-				</ProtectedRoute>
-			),
-			children: [
 				{
-					path: paths.account.settings.path,
-					lazy: async () => {
-						const { AccountSettings } = await import(
-							'@/features/account/routes/AccountSettings'
-						);
-						return { Component: AccountSettings };
-					},
+					element: (
+						<ProtectedRoute>
+							<Outlet />
+						</ProtectedRoute>
+					),
+					children: [
+						{
+							path: paths.account.settings.path,
+							lazy: async () => {
+								const { AccountSettings } = await import(
+									'@/features/account/routes/AccountSettings'
+								);
+								return { Component: AccountSettings };
+							},
+						},
+					],
 				},
 			],
 		},

@@ -1,44 +1,37 @@
 import { useSearchParams } from 'react-router-dom';
 import VideoPlayer from '../components/VideoPlayer';
-import { useQuery } from '@tanstack/react-query';
-import { doesVideoExist } from '../api/video-api';
 import { Navigate } from 'react-router-dom';
 import { CircularProgress, Card, Divider } from '@mui/material';
-import { io } from 'socket.io-client';
 import { VideoInfo } from '../components/VideoInfo';
 import { useState, useEffect } from 'react';
 import { CommentSection } from '../components/CommentSection';
-const IO_URL = import.meta.env.VITE_IO_URL;
+import { useVideo } from '../api/get-video';
+import { useUser } from '@/hooks/useAuth';
 
 const WatchVideo = () => {
 	const [searchParams] = useSearchParams();
-	const video_id = searchParams.get('v') || '';
-	const [progress, setProgress] = useState(0);
-	const { data, isLoading, error } = useQuery({
-		queryKey: ['video', video_id],
-		queryFn: async () => await doesVideoExist(video_id),
-	});
-	const user_id = sessionStorage.getItem('user_uuid') || null;
+	const videoId = searchParams.get('v') || '';
+	const { data, isLoading, error } = useVideo({ videoId });
+	const { data: user } = useUser();
 	if (isLoading) return <CircularProgress />;
 	if (error) {
 		return <Navigate to='/404' />;
 	}
 
-	const { message, video_title, createdAt, url, username, rating_percentage } = data || {};
+	const { createdAt, rating_percentage, url, username, video_title } = data!;
+	// if (message === 'UPLOADING') {
+	// 	useEffect(() => {
+	// 		const socket = io(IO_URL);
+	// 		socket.on(video_id, (progress) => {
+	// 			setProgress(progress);
+	// 		});
+	// 		return () => {
+	// 			socket.disconnect();
+	// 		};
+	// 	}, [video_id]);
 
-	if (message === 'UPLOADING') {
-		useEffect(() => {
-			const socket = io(IO_URL);
-			socket.on(video_id, (progress) => {
-				setProgress(progress);
-			});
-			return () => {
-				socket.disconnect();
-			};
-		}, [video_id]);
-
-		return <div>Video is still uploading, processing: {progress}%</div>;
-	}
+	// 	return <div>Video is still uploading, processing: {progress}%</div>;
+	// }
 
 	return (
 		<Card sx={{ maxWidth: 1440, margin: 'auto', boxShadow: 3 }}>
@@ -47,12 +40,10 @@ const WatchVideo = () => {
 				video_title={video_title}
 				createdAt={createdAt}
 				username={username}
-				video_id={video_id}
 				rating_percentage={rating_percentage}
-				user_id={user_id}
 			/>
 			<Divider sx={{ my: 2 }} />
-			<CommentSection video_id={video_id} user_id={user_id} />
+			<CommentSection videoId={videoId} userId={user?.id} />
 		</Card>
 	);
 };
