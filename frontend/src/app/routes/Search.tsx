@@ -5,7 +5,7 @@ import { fetchSearch } from '@/features/videos/api/video-api';
 import { useQuery } from '@tanstack/react-query';
 import { IterableVideo } from '@/features/videos/components/IterableVideo';
 import { VideoFeedType } from '@/types';
-
+//todo
 const Search = () => {
 	const [searchParams] = useSearchParams();
 	const search = searchParams.get('q') || ' ';

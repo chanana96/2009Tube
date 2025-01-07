@@ -15,16 +15,10 @@ export type UseAuthProps = {
 	onError?: (errorMessage: string) => void;
 };
 
-const hasTokenCookie = () => {
-	const cookies = document.cookie.split(';');
-	return cookies.some((cookie) => cookie.trim().startsWith('token='));
-};
-
 export const getUserQueryOptions = () => {
 	return queryOptions({
 		queryKey: userKey,
 		queryFn: userFn,
-		enabled: hasTokenCookie(),
 		staleTime: 1000 * 60 * 10,
 		retry: 1,
 	});

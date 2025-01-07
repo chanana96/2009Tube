@@ -4,11 +4,13 @@ export type AuthResponse = {
 };
 
 export type Base = {
-	id: string;
-	createdAt: number;
+	id: number;
+	createdAt: string;
 };
 
 export type User = {
+	bio: null;
+	email: string;
+	profile_image: string;
 	username: string;
-	avatar: string;
 } & Base;

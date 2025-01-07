@@ -3,16 +3,22 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Avatar } from '@mui/material';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { UploadModal } from '@/features/videos/components/UploadModal';
-import { useNavbarContext } from '@/contexts/navbar_context';
 import { useState } from 'react';
+import { env } from '@/config';
 
 const mobileMenuId = 'primary-search-account-menu-mobile';
 const menuId = 'primary-search-account-menu';
 
-export const AuthMenu = () => {
-	const avatar = sessionStorage.getItem('avatar') || '';
+export const AuthMenu = ({ setAnchorEl, setMobileMoreAnchorEl, profile_image }: any) => {
 	const [open, setOpen] = useState(false);
-	const { setMobileMoreAnchorEl, setAnchorEl } = useNavbarContext();
+
+	const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleMobileMenuClose = () => {
+		setMobileMoreAnchorEl(null);
+	};
 
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
@@ -28,9 +34,9 @@ export const AuthMenu = () => {
 				aria-label='account of current user'
 				aria-controls={menuId}
 				aria-haspopup='true'
-				onClick={(event) => setAnchorEl(event.currentTarget)}
+				onClick={handleProfileMenuOpen}
 				color='inherit'>
-				<Avatar alt='avatar' src={avatar} />
+				<Avatar alt='avatar' src={`${env.CLOUDFRONT_URL}Avatars/${profile_image}`} />
 			</IconButton>
 			<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
 				<IconButton
@@ -38,7 +44,7 @@ export const AuthMenu = () => {
 					aria-label='show more'
 					aria-controls={mobileMenuId}
 					aria-haspopup='true'
-					onClick={(event) => setMobileMoreAnchorEl(event.currentTarget)}
+					onClick={handleMobileMenuClose}
 					color='inherit'>
 					<MoreIcon />
 				</IconButton>

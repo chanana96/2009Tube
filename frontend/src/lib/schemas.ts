@@ -14,30 +14,30 @@ export const zodUsername = z
 
 export const registerInputSchema = z
 	.object({
-		Username: zodUsername,
-		Email: zodEmail,
-		Password: zodPassword,
-		ConfirmPassword: zodPassword,
-		AllowEmails: z.boolean().default(false),
+		username: zodUsername,
+		email: zodEmail,
+		password: zodPassword,
+		confirmPassword: zodPassword,
+		allowEmails: z.boolean().default(false),
 	})
-	.refine((input) => input.Password == input.ConfirmPassword, {
+	.refine((input) => input.password == input.confirmPassword, {
 		message: 'Passwords do not match.',
 		path: ['ConfirmPassword'],
 	});
 
 export const loginInputSchema = z.object({
-	Email: zodEmail,
-	Password: zodPassword,
+	email: zodEmail,
+	password: zodPassword,
 });
 
 export const newUsernameOrPasswordInputSchema = z
 	.object({
-		NewUsername: zodUsername,
-		OldPassword: zodPassword,
-		NewPassword: zodPassword,
-		ConfirmNewPassword: zodPassword,
+		newUsername: zodUsername,
+		oldPassword: zodPassword,
+		newPassword: zodPassword,
+		confirmNewPassword: zodPassword,
 	})
-	.refine((input) => input.NewPassword == input.ConfirmNewPassword, {
+	.refine((input) => input.newPassword == input.confirmNewPassword, {
 		message: 'Passwords do not match.',
 		path: ['ConfirmPassword'],
 	});

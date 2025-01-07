@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { User } from '../models/user_model';
 import { tokenService } from './token_service';
 import type { UserModel } from '../models/user_model';
+import { sanitizeUser } from '@/utils/sanitizeUser';
 
 type UserAuth = {
 	username: string;
@@ -9,21 +10,29 @@ type UserAuth = {
 	password: string;
 };
 
-export const verifyUserPassword = async ({ username, password }: Omit<UserAuth, 'email'>) => {
+const findUser = async (email: string, password: string) => {
+	const user = (await User.findOne({
+		where: { email: email },
+	})) as UserModel | null;
+
+	if (!user) {
+		throw new Error('Invalid login');
+	}
+	const verified = await verifyUserPassword({ password, password_hash: user.password_hash });
+	if (verified) {
+		return sanitizeUser(user);
+	}
+	return false;
+};
+
+export const verifyUserPassword = async ({
+	password,
+	password_hash,
+}: {
+	password: string;
+	password_hash: string;
+}) => {
 	try {
-		const findUserPasswordHash = async (username: string) => {
-			const user = (await User.findOne({
-				where: { username: username },
-			})) as UserModel | null;
-
-			if (!user) {
-				throw new Error('Invalid login');
-			}
-			return user.password_hash;
-		};
-
-		let password_hash = await findUserPasswordHash(username);
-
 		return await bcrypt.compare(password, password_hash);
 	} catch (err) {
 		throw err;
@@ -41,15 +50,23 @@ export const authService = {
 		}
 	},
 
-	loginUserService: async ({ username, password }: Omit<UserAuth, 'email'>) => {
+	loginUserService: async ({ email, password }: Omit<UserAuth, 'username'>) => {
 		try {
-			const pass = await verifyUserPassword({ username, password });
-			if (pass) {
-				const refresh = await tokenService.signRefresh(username);
-				const token = await tokenService.signJWT(username);
-				return { refresh, token };
+			const user = await findUser(email, password);
+			if (!user) {
+				throw new Error('Invalid login');
 			}
-			throw new Error('Invalid login');
+
+			const refresh = await tokenService.signRefresh(user);
+			const token = await tokenService.signJWT(user);
+			return {
+				refresh,
+				token,
+				username: user.username,
+				avatar: user.profile_image,
+				id: user.id,
+				createdAt: user.createdAt,
+			};
 		} catch (err) {
 			throw err;
 		}

@@ -46,7 +46,7 @@ export const VideosList = () => {
 											height: 200,
 											objectFit: 'cover',
 										}}
-										image={`${env.CLOUDFRONT_URL}${video.video_uuid}/thumbnail.jpg`}
+										image={`${env.CLOUDFRONT_URL}Videos/${video.video_uuid}/thumbnail.jpg`}
 										alt={video.video_title}
 									/>
 									<Chip

@@ -1,5 +1,6 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../config/database_config';
+import z from 'zod';
 
 export interface UserModel {
 	id: number;
@@ -36,3 +37,16 @@ export const User = sequelize.define(
 		tableName: 'users',
 	},
 );
+
+export const UserSchema = z.object({
+	id: z.number(),
+	username: z.string(),
+	email: z.string().email(),
+	password_hash: z.string(),
+	bio: z.string().nullable().optional(),
+	profile_image: z.string().nullable().optional(),
+	createdAt: z.coerce.date(),
+	updatedAt: z.coerce.date(),
+});
+
+export type UserType = z.infer<typeof UserSchema>;

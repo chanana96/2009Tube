@@ -1,12 +1,16 @@
 import { Navbar } from './Navbar';
-import { useContext } from 'react';
-import { ThemeContext } from '@/contexts/theme_context';
+import { memo } from 'react';
+
 import { Outlet } from 'react-router-dom';
 import { useUser } from '@/hooks/useAuth';
+import { useTheme } from '@/contexts/theme_context';
 
-export const Layout = () => {
-	const { isDarkTheme, toggleTheme } = useContext(ThemeContext);
-	const { data: user } = useUser();
+export const Layout = memo(() => {
+	const { isDarkTheme, toggleTheme } = useTheme();
+	const { data: user, isLoading } = useUser();
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<>
@@ -16,4 +20,4 @@ export const Layout = () => {
 			</main>
 		</>
 	);
-};
+});

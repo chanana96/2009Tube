@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 
 const UserProfile = () => {
 	const { username } = useParams();
-	return <ProfileContainer username={username as string} />;
+	if (!username) {
+		return null;
+	}
+	return <ProfileContainer username={username} />;
 };
 export default UserProfile;

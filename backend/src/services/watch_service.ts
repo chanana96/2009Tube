@@ -1,8 +1,5 @@
-import { User } from '../models/user_model';
 import { Video } from '../models/video_model';
 import { VideoVote } from '../models/video_vote_model';
-import type { VideoModel } from '../models/video_model';
-import { getRedisClient } from '../config/redis_config';
 import { VideoComment } from '../models/video_comment_model';
 
 type submitPayload = {

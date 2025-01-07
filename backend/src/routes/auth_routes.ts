@@ -8,9 +8,10 @@ import {
 	uploadVideo,
 	uploadVideoGetId,
 	progressReport,
-} from '../controllers/auth_controller';
+} from '@/controllers/auth_controller';
 import { upload } from '../config/multer_config';
 import { submitRatingForVideo, submitCommentForVideo } from '../controllers/watch_controller';
+import { isUserSignedIn } from '../middleware/auth_middleware';
 
 const authRouter = Router();
 
@@ -18,7 +19,7 @@ authRouter.post('/register', registerUser);
 authRouter.post('/login', loginUser);
 authRouter.post('/logout', logoutUser);
 
-authRouter.get('/me', isUser);
+authRouter.get('/me', isUserSignedIn, isUser);
 
 authRouter.post('/avatar/:username', upload.single('avatar'), uploadAvatar);
 

@@ -23,9 +23,9 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
 	const { register, handleSubmit, setError } = form;
 	const formAlert = useFormAlert(form);
 
-	const registering = useLogin({ onSuccess });
+	const login = useLogin({ onSuccess });
 	const submitHandler: SubmitHandler<LoginInput> = (inputValues) => {
-		registering.mutate(inputValues);
+		login.mutate(inputValues);
 	};
 	return (
 		<>
@@ -48,7 +48,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
 								className='flex items-center justify-center mb-2'>
 								<Grid className='w-full md:w-full xs:w-2/3'>
 									<TextField
-										{...register('Email')}
+										{...register('email')}
 										label='Email'
 										variant='outlined'
 										fullWidth
@@ -62,7 +62,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
 
 								<Grid className='w-full md:w-full xs:w-2/3'>
 									<TextField
-										{...register('Password')}
+										{...register('password')}
 										label='Password'
 										variant='outlined'
 										fullWidth

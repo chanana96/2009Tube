@@ -8,7 +8,7 @@ import { nanoid } from 'nanoid';
 import fs from 'fs';
 import { getRedisClient } from '../config/redis_config';
 import type { RedisClientType } from 'redis';
-import {io} from '../app';
+import { io } from '../app';
 
 require('dotenv').config();
 const BUCKET_NAME = process.env.AWS_BUCKET_NAME;
@@ -31,14 +31,15 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const { username, password } = req.body;
-		const { token, refresh } = await authService.loginUserService({ username, password });
+		const { email, password } = req.body;
+		const { token, refresh, username, avatar, id, createdAt } =
+			await authService.loginUserService({ email, password });
 
 		res.cookie('token', refresh, {
 			httpOnly: true,
 			sameSite: 'strict',
 		});
-		res.status(200).json({ message: 'Successful login', accessToken: token });
+		res.status(200).json({ token: token, user: { username, avatar, id, createdAt } });
 	} catch (err) {
 		res.status(401).send('Invalid login');
 		next(err);
@@ -59,9 +60,8 @@ export const isUser = async (req: Request, res: Response) => {
 	try {
 		const token = req.cookies.token;
 		const decoded = await tokenService.verifyJWT(token);
-		const sessionToken = await tokenService.signJWT(decoded.data);
 
-		res.status(200).json({ sessiontoken: sessionToken, userdata: decoded.data });
+		res.status(200).json({ ...decoded });
 	} catch (err) {
 		res.status(403).json({ message: 'Invalid token' });
 	}
@@ -99,17 +99,15 @@ export const progressReport = async (req: Request, res: Response) => {
 	const interval = setInterval(async () => {
 		const progress = await redis.get('req.params.video_id');
 		if (progress) {
-		  io.emit(req.params.video_id, progress); 
+			io.emit(req.params.video_id, progress);
 		}
-	  }, 1000);
-	  
-	  io.on('disconnect', () => {
+	}, 1000);
+
+	io.on('disconnect', () => {
 		clearInterval(interval);
 		return;
-	  })
-	 
+	});
 };
-
 
 const cleanup = async (redis: RedisClientType, destination: string, video_uuid: string) => {
 	await Promise.all([fs.promises.rmdir(destination, { recursive: true }), redis.del(video_uuid)]);

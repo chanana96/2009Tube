@@ -71,7 +71,6 @@ export const queryService = {
 			if (!videos) {
 				throw new Error('Videos not found');
 			}
-			console.log(videos);
 			return videos;
 		} catch (e) {
 			console.error(e);
@@ -80,7 +79,6 @@ export const queryService = {
 	},
 	findSearch: async (searchParams: string) => {
 		try {
-			console.log(searchParams);
 			User.hasMany(Video, { foreignKey: 'user_uuid', sourceKey: 'id' });
 			Video.belongsTo(User, {
 				foreignKey: 'user_uuid',
@@ -117,7 +115,7 @@ export const queryService = {
 			if (!videos) {
 				throw new Error('Videos not found');
 			}
-			console.log(videos);
+
 			return videos;
 		} catch (e) {
 			console.error(e);

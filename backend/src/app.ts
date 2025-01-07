@@ -6,7 +6,6 @@ import helmet from 'helmet';
 import { db } from './config/database_config';
 import authRouter from './routes/auth_routes';
 import queryRouter from './routes/query_routes';
-import streamRouter from './routes/stream_routes';
 import cookieParser from 'cookie-parser';
 import { Server } from 'socket.io';
 
@@ -24,7 +23,6 @@ db();
 
 app.use('/auth', authRouter);
 app.use('/query', queryRouter);
-app.use('/stream', streamRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 	next(err.stack);
@@ -36,15 +34,10 @@ const server = app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
 });
 
-
-export const io = new Server(server, 
-	{
-		cors: {
-			origin: "http://localhost:5173"
-		  }
-	}
-);
-
-
+export const io = new Server(server, {
+	cors: {
+		origin: 'http://localhost:5173',
+	},
+});
 
 export default app;

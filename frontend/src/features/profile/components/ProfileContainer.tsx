@@ -1,34 +1,36 @@
 import { Box, Typography, CircularProgress } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { Navigate } from 'react-router-dom';
-import { getProfile } from '../api/find-profile-api';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Card from '@mui/material/Card';
-import { useAvatarMutation } from '@/hooks/useAvatar';
+import { useUploadAvatar } from '../api/upload-avatar-api';
 import { ProfileAvatar } from './ProfileAvatar';
+import { useUser } from '@/hooks/useAuth';
+import { env, paths } from '@/config';
 
 interface ProfileContainerProps {
 	username: string;
 }
-
+//todo: this only displays your own profile right now, need to make mutation function to query profiles by username prop
 export const ProfileContainer = ({ username }: ProfileContainerProps) => {
-	const { data, isLoading, error, refetch } = useQuery({
-		queryKey: ['profile', username],
-		queryFn: () => getProfile(username),
-	});
-	const { mutate } = useAvatarMutation();
+	const navigate = useNavigate();
+	const [searchParams] = useSearchParams();
+	const redirectTo = searchParams.get('redirectTo');
+	const { data: user, isLoading } = useUser();
+
 	if (isLoading) return <CircularProgress />;
-	if (error) return <Navigate to='/404' />;
+	if (!user) {
+		navigate(`${redirectTo ? `${redirectTo}` : paths.home.path}`, {
+			replace: true,
+		});
+		return null;
+	}
+	const { createdAt, bio, profile_image } = user;
 
-	const { createdAt, bio, profile_image } = data?.data ?? {};
-
+	const { mutate } = useUploadAvatar();
 	const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (!event.target.files?.[0]) {
 			return;
 		}
-
-		mutate({ file: event.target.files[0], username });
-		sessionStorage.removeItem('avatar');
-		refetch();
+		mutate({ data: { file: event.target.files[0], username } });
 	};
 
 	return (
@@ -43,7 +45,9 @@ export const ProfileContainer = ({ username }: ProfileContainerProps) => {
 				}}>
 				<Box sx={{ position: 'absolute', bottom: '-60px', left: '5%' }}>
 					<label htmlFor='avatar' style={{ display: 'block', cursor: 'pointer' }}>
-						<ProfileAvatar profile_image={profile_image} />
+						<ProfileAvatar
+							profile_image={`${env.CLOUDFRONT_URL}Avatars/${profile_image}`}
+						/>
 					</label>
 					<input
 						type='file'

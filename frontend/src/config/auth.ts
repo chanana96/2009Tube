@@ -7,7 +7,7 @@ export type AuthConfig = {
 	userFn: QueryFunction<User>;
 	loginFn: MutationFunction<User, LoginInput>;
 	registerFn: MutationFunction<User, RegisterInput>;
-	logoutFn: MutationFunction<unknown, unknown>;
+	logoutFn: MutationFunction<unknown, void>;
 	userKey?: QueryKey;
 };
 

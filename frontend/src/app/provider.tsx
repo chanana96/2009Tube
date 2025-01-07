@@ -3,29 +3,36 @@ import * as React from 'react';
 import { queryConfig } from '@/config/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { NotFound } from './routes/NotFound';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { lightTheme, darkTheme } from '@/config/theme';
-import { ThemeContext } from '@/contexts/theme_context';
 import CssBaseline from '@mui/material/CssBaseline';
 import CircularProgress from '@mui/material/CircularProgress';
-import { useTheme } from '@/hooks/useTheme';
+import { ThemeProvider, useTheme } from '@/contexts/theme_context';
 import { Notifications } from '@/components/ui/Notifications';
+
 type AppProviderProps = {
 	children: React.ReactNode;
 };
 
+const ThemeWrapper = ({ children }: { children: React.ReactNode }) => {
+	const { isDarkTheme } = useTheme();
+	return (
+		<MuiThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>{children}</MuiThemeProvider>
+	);
+};
+
 export const AppProvider = ({ children }: AppProviderProps) => {
-	const { isDarkTheme, toggleTheme } = useTheme();
 	const [queryClient] = React.useState(
 		() =>
 			new QueryClient({
 				defaultOptions: queryConfig,
 			}),
 	);
+
 	return (
 		<React.Suspense fallback={<CircularProgress />}>
-			<ThemeContext.Provider value={{ isDarkTheme, toggleTheme }}>
-				<ThemeProvider theme={isDarkTheme ? darkTheme : lightTheme}>
+			<ThemeProvider>
+				<ThemeWrapper>
 					<ErrorBoundary FallbackComponent={NotFound}>
 						<QueryClientProvider client={queryClient}>
 							<CssBaseline />
@@ -33,8 +40,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 							{children}
 						</QueryClientProvider>
 					</ErrorBoundary>
-				</ThemeProvider>
-			</ThemeContext.Provider>
+				</ThemeWrapper>
+			</ThemeProvider>
 		</React.Suspense>
 	);
 };

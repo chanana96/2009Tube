@@ -56,7 +56,7 @@ export const RegisterForm = ({ onSuccess, onError }: RegisterFormProps) => {
 								className='flex items-center justify-center mb-2'>
 								<Grid className='w-full md:w-full xs:w-2/3'>
 									<TextField
-										{...register('Username')}
+										{...register('username')}
 										label='Username'
 										variant='outlined'
 										fullWidth
@@ -68,7 +68,7 @@ export const RegisterForm = ({ onSuccess, onError }: RegisterFormProps) => {
 								</Grid>
 								<Grid className='w-full md:w-full xs:w-2/3'>
 									<TextField
-										{...register('Email')}
+										{...register('email')}
 										label='Email'
 										variant='outlined'
 										fullWidth
@@ -81,7 +81,7 @@ export const RegisterForm = ({ onSuccess, onError }: RegisterFormProps) => {
 
 								<Grid className='w-full md:w-full xs:w-2/3'>
 									<TextField
-										{...register('Password')}
+										{...register('password')}
 										label='Password'
 										variant='outlined'
 										fullWidth
@@ -93,7 +93,7 @@ export const RegisterForm = ({ onSuccess, onError }: RegisterFormProps) => {
 								</Grid>
 								<Grid className='w-full md:w-full xs:w-2/3'>
 									<TextField
-										{...register('ConfirmPassword')}
+										{...register('confirmPassword')}
 										label='Confirm Password'
 										variant='outlined'
 										fullWidth
@@ -107,7 +107,7 @@ export const RegisterForm = ({ onSuccess, onError }: RegisterFormProps) => {
 									<FormControlLabel
 										control={
 											<Checkbox
-												{...register('AllowEmails', {
+												{...register('allowEmails', {
 													setValueAs: (value) => value === true,
 												})}
 												color='primary'

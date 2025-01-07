@@ -20,6 +20,7 @@ const Register = () => {
 				message: errorMessage,
 			});
 		};
+	//todo: swap out onError for global error provider
 	return (
 		<>
 			<RegisterForm onSuccess={onSuccess} onError={onError} />

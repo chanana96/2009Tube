@@ -3,7 +3,9 @@ import { paths } from '@/config';
 import { useUser } from '@/hooks/useAuth';
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+	console.log('protected route');
 	const user = useUser();
+
 	const location = useLocation();
 	if (!user.data) {
 		return <Navigate to={paths.auth.login.getHref(location.pathname)} replace />;

@@ -40,21 +40,6 @@ export const uploadVideoGetId = async (useruuid: string) => {
 	return response.data;
 };
 
-export const fetchVideoChunk = async (start: number, end: number, video_id: string) => {
-	try {
-		const response = await api.get(`/stream/${video_id}`, {
-			headers: {
-				Range: `bytes=${start}-${end}`,
-			},
-			responseType: 'arraybuffer',
-		});
-
-		return response.data;
-	} catch (error) {
-		console.error('Error fetching video chunk:', error);
-	}
-};
-
 export const doesVideoExist = async (video_id: string) => {
 	try {
 		const response = await api.get(`/query/video/${video_id}`);
